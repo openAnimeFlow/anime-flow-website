@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import logoImg from '../assets/logo.png'
+
 const repoUrl = 'https://github.com/openAnimeFlow/AnimeFlow'
 const releasesUrl = `${repoUrl}/releases`
 
@@ -77,11 +79,14 @@ const bangumiItems = [
           class="flex items-center gap-2 font-semibold tracking-tight text-white"
           to="/"
         >
-          <span
-            class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 text-sm font-bold text-white shadow-lg shadow-violet-500/25"
+          <img
+            :src="logoImg"
+            alt="AnimeFlow"
+            class="h-8 w-8 shrink-0 rounded-lg object-contain shadow-lg shadow-violet-500/20 sm:h-9 sm:w-9"
+            width="36"
+            height="36"
+            decoding="async"
           >
-            AF
-          </span>
           <span class="hidden sm:inline">AnimeFlow</span>
         </RouterLink>
         <nav
@@ -191,23 +196,22 @@ const bangumiItems = [
 
       <section
         id="platforms"
-        class="border-y border-white/5 bg-slate-900/40 py-16"
       >
-        <div class="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 class="text-center text-sm font-semibold uppercase tracking-widest text-violet-400">
+        <div class="mx-auto max-w-6xl px-4 text-right sm:px-6">
+          <h2 class="text-sm font-semibold uppercase tracking-widest text-violet-400">
             多平台
           </h2>
-          <p class="mx-auto mt-2 max-w-xl text-center text-2xl font-semibold text-white">
+          <p class="ml-auto mt-2 max-w-xl text-2xl font-semibold text-white">
             移动端与桌面端一套理念，随处打开即看
           </p>
           <ul
-            class="mt-10 flex flex-wrap justify-center gap-3"
+            class="mt-10 flex flex-wrap justify-end gap-3"
             role="list"
           >
             <li
               v-for="p in platforms"
               :key="p.name"
-              class="rounded-2xl border border-white/10 bg-slate-950/60 px-5 py-3 text-center shadow-sm"
+              class="rounded-2xl border border-white/10 bg-slate-950/60 px-5 py-3 text-right shadow-sm"
             >
               <span class="block font-medium text-white">{{ p.name }}</span>
               <span class="text-xs text-slate-500">{{ p.desc }}</span>
@@ -251,7 +255,7 @@ const bangumiItems = [
 
       <section
         id="danmaku"
-        class="border-t border-white/5 bg-slate-900/30 py-20"
+        class="py-20"
       >
         <div class="mx-auto grid max-w-6xl gap-12 px-4 sm:grid-cols-2 sm:px-6">
           <div>
@@ -333,7 +337,7 @@ const bangumiItems = [
 
       <section
         id="data"
-        class="border-t border-white/5 bg-slate-900/40 py-20"
+        class="py-20"
       >
         <div class="mx-auto max-w-6xl px-4 sm:px-6">
           <h2 class="text-2xl font-semibold text-white sm:text-3xl">
