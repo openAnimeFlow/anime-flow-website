@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import logoImg from '../assets/logo.png'
+import logoImg from '../../assets/logo.png'
 
 const repoUrl = 'https://github.com/openAnimeFlow/AnimeFlow'
 const releasesUrl = `${repoUrl}/releases`
 
 const platforms = [
-  { name: 'Android', desc: '移动端' },
-  { name: 'iOS', desc: '移动端' },
-  { name: 'Windows', desc: '桌面端' },
-  { name: 'macOS', desc: '桌面端' },
-  { name: 'Linux', desc: '桌面端' },
+  {name: 'Android', desc: '移动端'},
+  {name: 'iOS', desc: '移动端'},
+  {name: 'Windows', desc: '桌面端'},
+  {name: 'macOS', desc: '桌面端'},
+  {name: 'Linux', desc: '桌面端'},
 ] as const
 
 const highlights = [
@@ -42,9 +42,9 @@ const danmakuDetails = [
 ]
 
 const srModes = [
-  { name: '关闭', note: '节省性能，适合流畅优先' },
-  { name: '效率档', note: '轻量模型，适合中低端设备' },
-  { name: '质量档', note: '高画质，建议独显或高性能 GPU' },
+  {name: '关闭', note: '节省性能，适合流畅优先'},
+  {name: '效率档', note: '轻量模型，适合中低端设备'},
+  {name: '质量档', note: '高画质，建议独显或高性能 GPU'},
 ] as const
 
 const bangumiItems = [
@@ -351,7 +351,10 @@ const bangumiItems = [
             class="mt-8 list-decimal space-y-3 pl-5 text-sm text-slate-300 marker:text-violet-400"
           >
             <li>进入「设置」→「数据源管理」</li>
-            <li>添加数据源并填写站点、搜索 URL（使用 <code class="rounded bg-white/10 px-1.5 py-0.5 text-violet-200">{keyword}</code> 作为搜索占位符）</li>
+            <li>
+              添加数据源并填写站点、搜索 URL（使用 <code class="rounded bg-white/10 px-1.5 py-0.5 text-violet-200">{keyword}</code>
+              作为搜索占位符）
+            </li>
             <li>配置列表、线路、剧集等 XPath，保存后即可使用</li>
           </ol>
         </div>
