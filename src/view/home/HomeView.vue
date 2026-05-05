@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logoImg from '../../assets/logo.png'
+import logoImg from '../../../public/logo.ico'
 
 const repoUrl = 'https://github.com/openAnimeFlow/AnimeFlow'
 const releasesUrl = `${repoUrl}/releases`
