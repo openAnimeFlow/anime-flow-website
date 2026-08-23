@@ -59,9 +59,7 @@ const bangumiItems = [
 </script>
 
 <template>
-  <div
-    class="min-h-screen bg-slate-950 text-slate-200 antialiased selection:bg-violet-500/40 selection:text-white"
-  >
+  <div class="min-h-screen bg-slate-950 text-slate-200 antialiased selection:bg-violet-500/40 selection:text-white">
     <div
       class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,80,220,0.35),transparent)]"
     />
@@ -69,12 +67,8 @@ const bangumiItems = [
       class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_100%_0%,rgba(59,130,246,0.12),transparent)]"
     />
 
-    <header
-      class="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md"
-    >
-      <div
-        class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6"
-      >
+    <header class="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
+      <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6">
         <RouterLink
           class="flex items-center gap-2 font-semibold tracking-tight text-white"
           to="/"
@@ -142,21 +136,15 @@ const bangumiItems = [
     </header>
 
     <main id="top">
-      <section
-        class="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:px-6 sm:pb-28 sm:pt-24"
-      >
+      <section class="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:px-6 sm:pb-10 sm:pt-10">
         <p
           class="mb-4 inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-200"
         >
           开源跨平台追番播放器
         </p>
-        <h1
-          class="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl sm:leading-[1.1]"
-        >
+        <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl sm:leading-[1.1]">
           用
-          <span
-            class="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent"
-          >
+          <span class="bg-linear-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
             AnimeFlow
           </span>
           追番，多端一致、画质与弹幕兼得
@@ -177,7 +165,7 @@ const bangumiItems = [
         <div class="mt-10 flex flex-wrap gap-3">
           <a
             :href="releasesUrl"
-            class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition hover:brightness-110"
+            class="inline-flex items-center justify-center rounded-xl bg-linear-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition hover:brightness-110"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -194,9 +182,7 @@ const bangumiItems = [
         </div>
       </section>
 
-      <section
-        id="platforms"
-      >
+      <section id="platforms">
         <div class="mx-auto max-w-6xl px-4 text-right sm:px-6">
           <h2 class="text-sm font-semibold uppercase tracking-widest text-violet-400">
             多平台
@@ -238,7 +224,7 @@ const bangumiItems = [
           >
             <div
               :class="[
-                'absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition group-hover:opacity-100',
+                'absolute -right-8 -top-8 h-32 w-32 rounded-full bg-linear-to-br opacity-60 blur-2xl transition group-hover:opacity-100',
                 h.accent,
               ]"
               aria-hidden="true"
@@ -347,9 +333,7 @@ const bangumiItems = [
             在应用内即可维护数据源：版本、名称、站点与搜索链接、各类 XPath
             规则等，便于扩展与迁移。
           </p>
-          <ol
-            class="mt-8 list-decimal space-y-3 pl-5 text-sm text-slate-300 marker:text-violet-400"
-          >
+          <ol class="mt-8 list-decimal space-y-3 pl-5 text-sm text-slate-300 marker:text-violet-400">
             <li>进入「设置」→「数据源管理」</li>
             <li>
               添加数据源并填写站点、搜索 URL（使用 <code class="rounded bg-white/10 px-1.5 py-0.5 text-violet-200">{keyword}</code>
@@ -362,7 +346,7 @@ const bangumiItems = [
 
       <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div
-          class="rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-950/50 to-slate-900/80 p-8 text-center sm:p-12"
+          class="rounded-3xl border border-violet-500/20 bg-linear-to-br from-violet-950/50 to-slate-900/80 p-8 text-center sm:p-12"
         >
           <h2 class="text-xl font-semibold text-white sm:text-2xl">
             参与共建
