@@ -1,5 +1,4 @@
-export const repoUrl = 'https://github.com/openAnimeFlow/AnimeFlow'
-export const releasesUrl = `${repoUrl}/releases`
+export { repoUrl, releasesUrl } from '@/config/site'
 export const platforms = ['Windows', 'Android', 'macOS', 'Linux', 'iOS'] as const
 export const devices = [
   { id: 'desktop', name: '桌面端', icon: 'desktop', heading: '在大屏上，尽情进入故事。', description: '宽阔的内容视野，清楚的侧栏导航。发现好番、查看播放记录，在桌面上从容安排你的追番日常。', platforms: 'Windows · macOS · Linux', image: '/images/app-wide.jpg' },

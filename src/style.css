@@ -1,5 +1,35 @@
 @import 'tailwindcss';
 
+:root {
+  --home-bg: #fbfdfd;
+  --home-ink: #18333b;
+  --home-muted: #627b83;
+  --home-accent: #007b91;
+  --home-soft: #d8f5fa;
+  --home-panel: #f0f8fa;
+  --home-line: #dce9ec;
+  --site-header-height: 92px;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--home-bg);
+  color: var(--home-ink);
+  font-family: Inter, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-content {
+  padding-top: var(--site-header-height);
+}
+
+@media (max-width: 850px) { :root { --site-header-height: 76px; } }
+@media (max-width: 600px) { :root { --site-header-height: 70px; } }
+
 html {
   scroll-behavior: smooth;
 }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

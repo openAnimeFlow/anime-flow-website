@@ -1,32 +1,19 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import FlowIcon from '@/components/FlowIcon.vue'
 import ProductDevice from '@/components/ProductDevice.vue'
 import { devices, features, platforms, releasesUrl, repoUrl } from './homeData'
 import './home.css'
 
-const menuOpen = ref(false)
 const selectedDevice = ref<(typeof devices)[number]['id']>('desktop')
 const currentDevice = computed(() => devices.find(device => device.id === selectedDevice.value) || devices[0])
-const selectedPlatform = ref<(typeof platforms)[number]>('Windows')
 const screenshotDialog = ref<HTMLDialogElement>()
 const year = new Date().getFullYear()
 
-function closeMenu() { menuOpen.value = false }
-function handleKeydown(event: KeyboardEvent) { if (event.key === 'Escape') closeMenu() }
 function expandScreenshot() { screenshotDialog.value?.showModal() }
 function closeScreenshot(event: MouseEvent) {
   if (event.target === screenshotDialog.value) screenshotDialog.value?.close()
 }
-onMounted(() => {
-  const agent = navigator.userAgent
-  if (/Android/i.test(agent)) selectedPlatform.value = 'Android'
-  else if (/iPhone|iPad/i.test(agent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) selectedPlatform.value = 'iOS'
-  else if (/Mac/i.test(agent)) selectedPlatform.value = 'macOS'
-  else if (/Linux/i.test(agent)) selectedPlatform.value = 'Linux'
-  document.addEventListener('keydown', handleKeydown)
-})
-onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
@@ -35,76 +22,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
       class="home-skip"
       href="#main"
     >跳转至主要内容</a>
-    <header class="home-header">
-      <div class="home-container home-nav">
-        <a
-          class="home-brand"
-          href="#main"
-          aria-label="AnimeFlow 首页"
-          @click="closeMenu"
-        ><img
-          src="/images/logo.webp"
-          width="38"
-          height="38"
-          alt=""
-        ><span>AnimeFlow<span class="brand-dot">.</span></span></a>
-        <nav
-          class="home-desktop-nav"
-          aria-label="官网导航"
-        >
-          <a href="#features">功能体验</a><a href="#experience">多端体验</a><a
-            :href="`${repoUrl}#readme`"
-            target="_blank"
-            rel="noopener noreferrer"
-          >使用指南 <span>↗</span></a>
-        </nav>
-        <div class="home-nav-actions">
-          <a
-            class="home-github"
-            :href="repoUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="访问 GitHub 仓库"
-          ><FlowIcon name="github" /></a><a
-            href="#download"
-            class="home-nav-download"
-          >下载客户端 <FlowIcon
-            name="arrow"
-            :size="16"
-          /></a><button
-            class="home-menu-toggle"
-            :aria-expanded="menuOpen"
-            aria-controls="home-mobile-nav"
-            aria-label="展开或收起导航"
-            @click="menuOpen = !menuOpen"
-          >
-            <FlowIcon :name="menuOpen ? 'close' : 'menu'" />
-          </button>
-        </div>
-      </div>
-      <nav
-        v-show="menuOpen"
-        id="home-mobile-nav"
-        class="home-mobile-nav"
-        aria-label="移动端导航"
-      >
-        <a
-          href="#features"
-          @click="closeMenu"
-        >功能体验</a><a
-          href="#experience"
-          @click="closeMenu"
-        >多端体验</a><a
-          href="#download"
-          @click="closeMenu"
-        >下载客户端</a><a
-          :href="`${repoUrl}#readme`"
-          target="_blank"
-          rel="noopener noreferrer"
-          @click="closeMenu"
-        >使用指南 ↗</a>
-      </nav>
-    </header>
     <main
       id="main"
       tabindex="-1"
@@ -126,7 +43,9 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
           <div class="home-hero-buttons">
             <a
               class="home-button primary"
-              href="#download"
+              :href="releasesUrl"
+              target="_blank"
+              rel="noopener noreferrer"
             >免费下载 <FlowIcon
               name="download"
               :size="18"
@@ -291,10 +210,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
             class="home-experience-visual"
             :data-selected-device="selectedDevice"
           >
-            <div
-              class="experience-orbit"
-              aria-hidden="true"
-            /><ProductDevice :device="selectedDevice" />
+            <ProductDevice :device="selectedDevice" />
           </div>
         </div>
       </section>
@@ -320,59 +236,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
           name="arrow"
           :size="18"
         /></a>
-      </section>
-      <section
-        id="download"
-        class="home-download"
-        aria-labelledby="download-title"
-      >
-        <div class="home-container home-download-inner">
-          <div class="home-download-copy">
-            <p class="home-eyebrow">
-              LET YOUR ANIME FLOW
-            </p><h2 id="download-title">
-              让追番，<br>从此更自在。
-            </h2><p>选择你的设备，和 AnimeFlow 一起进入故事。</p><a
-              :href="releasesUrl"
-              class="home-release-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >查看更新与全部发布版本 ↗</a>
-          </div><div class="home-download-panel">
-            <p class="home-download-panel-label">
-              获取 AnimeFlow <span>开源客户端</span>
-            </p><div
-              class="home-download-platforms"
-              aria-label="选择下载平台"
-            >
-              <button
-                v-for="platform in platforms"
-                :key="platform"
-                :class="{ active: selectedPlatform === platform }"
-                :aria-pressed="selectedPlatform === platform"
-                @click="selectedPlatform = platform"
-              >
-                <FlowIcon
-                  :name="platform === 'Android' || platform === 'iOS' ? 'phone' : 'desktop'"
-                  :size="20"
-                /><span>{{ platform }}</span>
-              </button>
-            </div><a
-              class="home-button primary home-download-cta"
-              :href="releasesUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            ><FlowIcon
-              name="download"
-              :size="18"
-            /> 获取 {{ selectedPlatform }} 版本 <FlowIcon
-              name="arrow"
-              :size="17"
-            /></a><p class="home-download-help">
-              {{ selectedPlatform === 'iOS' ? 'iPhone 与 iPad：前往 GitHub Releases 查看 iOS 构建与安装说明。' : `前往 GitHub Releases 选择适合设备的 ${selectedPlatform} 安装包。` }}
-            </p>
-          </div>
-        </div>
       </section>
     </main>
     <footer class="home-footer home-container">

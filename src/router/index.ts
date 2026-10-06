@@ -13,7 +13,12 @@ const router = createRouter({
   ],
   scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition
-    if (to.hash) return { el: to.hash, behavior: 'smooth' }
+    if (to.hash) {
+      const headerHeight = Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--site-header-height'),
+      ) || 0
+      return { el: to.hash, top: headerHeight + 24, behavior: 'smooth' }
+    }
     return { top: 0 }
   },
 })
