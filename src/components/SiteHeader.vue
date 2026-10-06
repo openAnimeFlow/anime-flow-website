@@ -3,7 +3,9 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import FlowIcon from '@/components/FlowIcon.vue'
 import { releasesUrl, repoUrl } from '@/config/site'
+import { useTheme } from '@/theme'
 
+const { theme, toggleTheme } = useTheme()
 const route = useRoute()
 const menuOpen = ref(false)
 function closeMenu() { menuOpen.value = false }
@@ -44,6 +46,15 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         >使用指南 <span>↗</span></a>
       </nav>
       <div class="nav-actions">
+        <button
+          class="theme-toggle"
+          type="button"
+          :aria-label="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
+          :title="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
+          @click="toggleTheme"
+        >
+          <FlowIcon :name="theme === 'dark' ? 'sun' : 'moon'" />
+        </button>
         <a
           class="github-link"
           :href="repoUrl"
@@ -120,9 +131,11 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 .desktop-nav a > span { margin-left: 3px; }
 .nav-actions { display: flex; gap: 24px; align-items: center; }
 .github-link { display: flex; }
+.theme-toggle { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 40px; height: 40px; border: 1px solid var(--home-line); border-radius: 10px; background: transparent; color: var(--home-muted); }
+.theme-toggle:hover { background: var(--home-soft); color: var(--home-accent); }
 .nav-download { display: flex; gap: 16px; align-items: center; padding: 11px 16px; border-radius: 8px; background: var(--home-soft); font-size: 12px; font-weight: 600; }
 .menu-toggle { display: none; padding: 8px; background: transparent; color: var(--home-ink); border: 0; }
-.mobile-nav { position: absolute; inset: 100% 0 auto; display: flex; padding: 16px 24px 24px; max-height: calc(100dvh - var(--site-header-height)); overflow-y: auto; background: var(--home-bg); border-bottom: 1px solid var(--home-line); flex-direction: column; gap: 18px; box-shadow: 0 16px 24px #18333b0b; }
+.mobile-nav { position: absolute; inset: 100% 0 auto; display: flex; padding: 16px 24px 24px; max-height: calc(100dvh - var(--site-header-height)); overflow-y: auto; background: var(--home-bg); border-bottom: 1px solid var(--home-line); flex-direction: column; gap: 18px; box-shadow: 0 16px 24px var(--home-menu-shadow); }
 @media (min-width: 851px) { .mobile-nav { display: none !important; } }
 @media (max-width: 1100px) { .site-nav { width: calc(100% - 64px); } }
 @media (max-width: 850px) {
@@ -139,5 +152,8 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   .github-link { display: none; }
   .nav-download { font-size: 11px; padding: 9px 11px; }
   .nav-download svg { display: none; }
+}
+@media (max-width: 420px) {
+  .nav-download { display: none; }
 }
 </style>

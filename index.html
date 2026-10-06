@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/logo.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fbfdfd" />
+    <script>
+      (() => {
+        let theme
+        try { theme = localStorage.getItem('animeflow-theme') } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        document.documentElement.dataset.theme = theme
+        document.documentElement.style.colorScheme = theme
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0b1418' : '#fbfdfd'
+      })()
+    </script>
     <meta
       name="description"
       content="AnimeFlow — 跨平台动漫视频播放与追番应用，支持多数据源、实时超分辨率、Bangumi 与弹弹Play 弹幕。"

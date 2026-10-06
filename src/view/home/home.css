@@ -18,7 +18,7 @@
 .home-page img { max-width: 100%; display: block; }
 .home-page section[id] { scroll-margin-top: calc(var(--site-header-height) + 24px); }
 .home-container { width: calc(100% - 112px); max-width: 1240px; margin-inline: auto; }
-.home-skip { position: fixed; top: 12px; left: 16px; transform: translateY(-150%); padding: 10px 16px; background: #183b45; color: #fff !important; z-index: 100; border-radius: 6px; }
+.home-skip { position: fixed; top: 12px; left: 16px; transform: translateY(-150%); padding: 10px 16px; background: var(--home-primary); color: var(--home-on-primary) !important; z-index: 100; border-radius: 6px; }
 .home-skip:focus { transform: translateY(0); }
 .home-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 23px; font-weight: 700; letter-spacing: -.8px; line-height: 1; }
 .home-brand img { border-radius: 11px; }
@@ -34,14 +34,14 @@
 .home-hero-buttons { display: flex; align-items: center; gap: 14px; margin-top: 32px; }
 .home-button { display: inline-flex; align-items: center; justify-content: center; gap: 16px; padding: 15px 23px; border: 1px solid transparent; border-radius: 9px; font-size: 13px; font-weight: 600; transition: transform .2s, background .2s; }
 .home-button:hover { transform: translateY(-2px); }
-.home-button.primary { background: #183b45; color: #fff; }
-.home-button.primary:hover { background: #215361; }
+.home-button.primary { background: var(--home-primary); color: var(--home-on-primary); }
+.home-button.primary:hover { background: var(--home-primary-hover); }
 .home-button.secondary { border-color: var(--home-line); background: var(--home-bg); }
 .home-hero-platforms { margin-top: 32px; color: var(--home-muted); font-size: 11px; }
 .home-hero-platforms > div { display: flex; align-items: center; gap: 9px; margin-top: 10px; }
 .home-hero-platforms i { height: 11px; width: 1px; background: var(--home-line); margin-inline: 6px; }
 .home-device-scene { position: relative; width: 100%; height: 570px; isolation: isolate; }
-.home-device-glow { position: absolute; inset: -20px -20px 25px 0; z-index: -1; border-radius: 50%; background: radial-gradient(ellipse, #ddf6fa 0%, #edf9fb 45%, transparent 70%); }
+.home-device-glow { position: absolute; inset: -20px -20px 25px 0; z-index: -1; border-radius: 50%; background: radial-gradient(ellipse, var(--home-glow-center) 0%, var(--home-glow-edge) 45%, transparent 70%); }
 .home-scene-caption { position: absolute; left: 18%; top: -4px; color: var(--home-accent); display: flex; align-items: center; gap: 10px; font-size: 11px; transform: rotate(-3deg); }
 .home-scene-caption > span { font-size: 24px; }
 .scene-desktop { position: absolute; width: 83%; top: 42px; right: 4%; transform: perspective(1400px) rotateY(-5deg) rotateX(2deg); }
@@ -71,7 +71,7 @@
 .home-experience { padding-block: 18px 75px; }
 .home-experience-panel { display: grid; grid-template-columns: 37% 63%; align-items: center; border: 1px solid var(--home-line); background: var(--home-panel); border-radius: 24px; padding: 36px; gap: 0; }
 .home-experience-copy { padding: 0 24px 0 0; }
-.home-device-picker { display: flex; align-items: center; gap: 5px; border-radius: 10px; padding: 4px; background: #e3eef1; width: fit-content; }
+.home-device-picker { display: flex; align-items: center; gap: 5px; border-radius: 10px; padding: 4px; background: var(--home-picker); width: fit-content; }
 .home-device-picker button { display: flex; align-items: center; gap: 7px; color: var(--home-muted); background: transparent; border: 0; padding: 11px 14px; border-radius: 7px; font-size: 12px; white-space: nowrap; }
 .home-device-picker button.active { color: var(--home-accent); background: var(--home-bg); box-shadow: 0 2px 5px #163f4d09; }
 .home-experience-text { margin-top: 28px; }
@@ -98,7 +98,7 @@
 .home-footer-right nav { display: flex; gap: 24px; font-size: 12px; }
 .home-footer-right > span { display: block; font-size: 10px; color: var(--home-muted); margin-top: 6px; }
 .home-screenshot-dialog { border: 1px solid var(--home-line); border-radius: 15px; background: var(--home-bg); color: var(--home-ink); padding: 0; margin: auto; max-width: min(1200px, 94vw); max-height: 90vh; }
-.home-screenshot-dialog::backdrop { background: #112b39c9; backdrop-filter: blur(6px); }
+.home-screenshot-dialog::backdrop { background: var(--home-dialog-backdrop); backdrop-filter: blur(6px); }
 .home-screenshot-dialog > div { padding: 18px; }
 .home-screenshot-dialog header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 15px; }
 .home-screenshot-dialog h2 { font-size: 15px; font-weight: 600; }
