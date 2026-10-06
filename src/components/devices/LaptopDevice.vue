@@ -1,5 +1,7 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ device: 'desktop' | 'tablet' | 'phone'; eager?: boolean }>(), { eager: false })
+import type { DeviceProps } from './types'
+
+withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined })
 
 const keyboard = [
   ['esc', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◉'],
@@ -14,27 +16,12 @@ const keyboard = [
 <template>
   <div
     class="product-device"
-    :data-device="device"
+    data-device="desktop"
+    :data-custom-screenshot="Boolean(screenshot)"
   >
-    <span
-      v-if="device !== 'desktop'"
-      class="hardware-button button-power"
-      aria-hidden="true"
-    />
-    <span
-      v-if="device !== 'desktop'"
-      class="hardware-button button-volume-up"
-      aria-hidden="true"
-    />
-    <span
-      v-if="device === 'phone'"
-      class="hardware-button button-volume-down"
-      aria-hidden="true"
-    />
     <div class="device-bezel">
       <div class="device-screen">
         <div
-          v-if="device === 'desktop'"
           class="mac-menubar"
           aria-hidden="true"
         >
@@ -49,22 +36,11 @@ const keyboard = [
             <span>⌁</span><span class="mac-battery" /><span>9:41</span>
           </div>
         </div>
-        <div
-          v-if="device === 'phone'"
-          class="phone-status"
-          aria-hidden="true"
-        >
-          <span>9:41</span><div class="dynamic-island">
-            <i />
-          </div><div class="status-signals">
-            <i /><span class="phone-battery" />
-          </div>
-        </div>
         <img
-          :src="device === 'phone' ? '/images/app-mobile.jpg' : '/images/app-wide.jpg'"
-          :alt="device === 'phone' ? 'AnimeFlow 手机端推荐与播放记录界面' : device === 'tablet' ? 'AnimeFlow 在 iPad 设备框中的宽屏界面展示' : 'AnimeFlow 在 macOS MacBook 笔记本中的宽屏界面展示'"
-          :width="device === 'phone' ? 1080 : 2732"
-          :height="device === 'phone' ? 2294 : 2010"
+          :src="screenshot?.src ?? '/images/app-wide.jpg'"
+          :alt="screenshot?.alt ?? 'AnimeFlow 在 macOS MacBook 笔记本中的宽屏界面展示'"
+          :width="screenshot?.width ?? 2732"
+          :height="screenshot?.height ?? 2010"
           :loading="eager ? 'eager' : 'lazy'"
           :fetchpriority="eager ? 'high' : 'auto'"
           decoding="async"
@@ -75,13 +51,11 @@ const keyboard = [
         aria-hidden="true"
       ><i /></span>
       <span
-        v-if="device === 'desktop'"
         class="lid-brand"
         aria-hidden="true"
       >MacBook Pro</span>
     </div>
     <div
-      v-if="device === 'desktop'"
       class="laptop-base"
       aria-hidden="true"
     >
@@ -112,35 +86,19 @@ const keyboard = [
   </div>
 </template>
 
+<style scoped src="./device.css" />
 <style scoped>
-.product-device {
-  position: relative;
-  width: 100%;
-  container-type: inline-size;
-  filter: drop-shadow(0 18px 22px #163a471c);
-}
 .device-bezel {
-  position: relative;
   padding: 1.1cqw 1.05cqw 1.65cqw;
   border-radius: 1.8cqw 1.8cqw .8cqw .8cqw;
   background: linear-gradient(100deg, #101114, #2f3034 52%, #151619);
   box-shadow: 0 0 0 .22cqw #92969a, 0 0 0 .4cqw #d5d7d9, inset 0 0 0 .13cqw #48494d;
 }
 .device-screen {
-  position: relative;
-  overflow: hidden;
   aspect-ratio: 16 / 10;
   border-radius: .8cqw .8cqw .2cqw .2cqw;
-  background: #0e1316;
 }
-.device-screen img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: top;
-}
-[data-device=desktop] .device-screen img { height: calc(100% - 2.35cqw); }
+.device-screen img { height: calc(100% - 2.35cqw); }
 .mac-menubar {
   height: 2.35cqw;
   padding-inline: 1.3cqw;
@@ -165,41 +123,21 @@ const keyboard = [
 .laptop-hinge { position: absolute; z-index: 1; top: -.15cqw; left: 9%; right: 9%; height: .7cqw; border-radius: 0 0 .3cqw .3cqw; background: linear-gradient(#030507, #53585e, #171a1e); }
 .laptop-deck {
   position: relative;
-  height: 15.5cqw;
+  height: 24.5cqw;
   background: linear-gradient(160deg, #d8dadd 0%, #e6e7e9 42%, #c2c6cb 80%, #a8adb4 100%);
   clip-path: polygon(4.2% 0, 95.8% 0, 100% 96%, 99.5% 100%, .5% 100%, 0 96%);
   border-radius: .5cqw .5cqw 1cqw 1cqw;
   box-shadow: inset 0 -.3cqw .2cqw #a3a7ad, inset 0 .3cqw .2cqw #fff8;
 }
-.keyboard { position: absolute; top: 1.1cqw; left: 15%; width: 70%; height: 8.5cqw; background: #5c6167; border-radius: .55cqw; padding: .34cqw; display: flex; flex-direction: column; gap: .2cqw; box-shadow: 0 0 0 .15cqw #f3f3f4a8, inset 0 0 .4cqw #34383d; }
+.keyboard { position: absolute; top: 1.4cqw; left: 14%; width: 72%; height: 13.2cqw; background: #5c6167; border-radius: .55cqw; padding: .34cqw; display: flex; flex-direction: column; gap: .2cqw; box-shadow: 0 0 0 .15cqw #f3f3f4a8, inset 0 0 .4cqw #34383d; }
 .keyboard-row { display: flex; flex: 1; gap: .23cqw; min-height: 0; }
-.keycap { display: flex; align-items: center; justify-content: center; flex: 1; min-width: 0; background: linear-gradient(#282b30, #16181c); border-radius: .21cqw; color: #b7bcc2; font-size: .63cqw; line-height: 1; box-shadow: inset 0 0 0 .1cqw #40444a, 0 .12cqw .05cqw #0004; }
-.keycap.key-wide { flex: 1.55; font-size: .47cqw; }
+.keycap { display: flex; align-items: center; justify-content: center; flex: 1; min-width: 0; background: linear-gradient(#282b30, #16181c); border-radius: .21cqw; color: #b7bcc2; font-size: .8cqw; line-height: 1; box-shadow: inset 0 0 0 .1cqw #40444a, 0 .12cqw .05cqw #0004; }
+.keycap.key-wide { flex: 1.55; font-size: .6cqw; }
 .keycap.spacebar { flex: 5.8; }
-.speaker-grille { position: absolute; top: 1.4cqw; width: 3.2%; height: 7.7cqw; background-image: radial-gradient(#53595f 27%, transparent 32%); background-size: .36cqw .36cqw; opacity: .6; border-radius: .25cqw; }
+.speaker-grille { position: absolute; top: 1.7cqw; width: 3.2%; height: 12.6cqw; background-image: radial-gradient(#53595f 27%, transparent 32%); background-size: .36cqw .36cqw; opacity: .6; border-radius: .25cqw; }
 .grille-left { left: 10%; }
 .grille-right { right: 10%; }
-.trackpad { position: absolute; left: 37%; width: 26%; top: 10.25cqw; height: 4.25cqw; border-radius: .45cqw; background: linear-gradient(150deg, #d5d8db, #c6cacf); border: .12cqw solid #aeb3b9; box-shadow: 0 .12cqw .12cqw #fff9, inset 0 .1cqw .1cqw #989ea233; }
+.trackpad { position: absolute; left: 35%; width: 30%; top: 15.9cqw; height: 7.2cqw; border-radius: .45cqw; background: linear-gradient(150deg, #d5d8db, #c6cacf); border: .12cqw solid #aeb3b9; box-shadow: 0 .12cqw .12cqw #fff9, inset 0 .1cqw .1cqw #989ea233; }
 .laptop-front-edge { position: relative; height: .75cqw; margin-top: -.15cqw; border-radius: 0 0 1.3cqw 1.3cqw; background: linear-gradient(#f0f1f2, #9ca3ab 55%, #c3c7cc 90%); box-shadow: 0 .3cqw .4cqw #40535e23; }
 .laptop-front-edge span { display: block; width: 13%; height: .36cqw; margin: auto; background: linear-gradient(#959ba3, #dfe2e5); border-radius: 0 0 .8cqw .8cqw; }
-.hardware-button { position: absolute; z-index: -1; background: linear-gradient(90deg, #87898e, #d4d6d9, #85888d); border-radius: .6cqw; }
-[data-device=tablet] .device-bezel { padding: 2.7cqw; border-radius: 5.5cqw; background: #111216; box-shadow: 0 0 0 .25cqw #60636a, 0 0 0 .52cqw #b5b7bc, inset 0 0 0 .18cqw #272930; }
-[data-device=tablet] .device-screen { aspect-ratio: 2732 / 2010; border-radius: 3.3cqw; }
-[data-device=tablet] .device-camera { width: 1cqw; height: 1cqw; top: 50%; left: 1.3cqw; transform: translateY(-50%); border-radius: 50%; background: radial-gradient(circle at 35% 35%, #1d2c42, #07080b 70%); border: .15cqw solid #2b3039; }
-[data-device=tablet] .device-camera i { display: none; }
-[data-device=tablet] .button-power { right: 8%; top: -.7cqw; width: 5%; height: .5cqw; }
-[data-device=tablet] .button-volume-up { right: -.7cqw; top: 8%; width: .5cqw; height: 8%; }
-[data-device=phone] .device-bezel { padding: 2.3cqw; border-radius: 15cqw; background: #131316; box-shadow: 0 0 0 .55cqw #4b4b4e, 0 0 0 1.3cqw #bab8b4, 0 0 0 1.55cqw #797772, inset 0 0 0 .35cqw #3e3f43; }
-[data-device=phone] .device-screen { aspect-ratio: auto; border-radius: 12.7cqw; }
-[data-device=phone] .device-screen img { height: auto; }
-[data-device=phone] .device-camera { display: none; }
-.phone-status { height: 13cqw; display: flex; align-items: center; justify-content: space-between; padding: 0 7cqw; background: #0e1316; color: #eceef0; font-size: 5.5cqw; font-weight: 600; }
-.dynamic-island { position: absolute; left: 32%; top: 5.3cqw; width: 36%; height: 7.4cqw; border-radius: 5cqw; background: #000; }
-.dynamic-island i { position: absolute; right: 3cqw; top: 2.2cqw; width: 3cqw; height: 3cqw; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #17233b, #070c12 70%); }
-.status-signals { display: flex; align-items: center; gap: 2cqw; }
-.status-signals > i { width: 7cqw; height: 4.2cqw; background: linear-gradient(90deg, #eceef0 16%, transparent 16% 27%, #eceef0 27% 44%, transparent 44% 55%, #eceef0 55% 72%, transparent 72% 83%, #eceef0 83%); clip-path: polygon(0 65%, 22% 65%, 22% 45%, 49% 45%, 49% 24%, 76% 24%, 76% 0, 100% 0, 100% 100%, 0 100%); }
-.phone-battery { width: 8cqw; height: 4cqw; border: .5cqw solid #e0e3e6; border-radius: 1cqw; box-shadow: inset 0 0 0 .5cqw #0e1316; background: #e0e3e6; }
-[data-device=phone] .button-power { right: -2cqw; top: 25%; width: 1cqw; height: 14%; }
-[data-device=phone] .button-volume-up { left: -2cqw; top: 24%; width: 1cqw; height: 8%; }
-[data-device=phone] .button-volume-down { left: -2cqw; top: 35%; width: 1cqw; height: 8%; }
 </style>

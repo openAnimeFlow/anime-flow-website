@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import FlowIcon from '@/components/FlowIcon.vue'
-import ProductDevice from '@/components/ProductDevice.vue'
+import LaptopDevice from '@/components/devices/LaptopDevice.vue'
+import IPadDevice from '@/components/devices/IPadDevice.vue'
+import PhoneDevice from '@/components/devices/PhoneDevice.vue'
 import { devices, features, platforms, releasesUrl, repoUrl } from './homeData'
 import './home.css'
 
+const deviceComponents = { desktop: LaptopDevice, tablet: IPadDevice, phone: PhoneDevice }
 const selectedDevice = ref<(typeof devices)[number]['id']>('desktop')
 const currentDevice = computed(() => devices.find(device => device.id === selectedDevice.value) || devices[0])
 const screenshotDialog = ref<HTMLDialogElement>()
@@ -77,36 +80,33 @@ function closeScreenshot(event: MouseEvent) {
           role="group"
           aria-label="AnimeFlow 桌面端、iPad 与手机展示"
         >
-          <div
-            class="home-device-glow"
-            aria-hidden="true"
-          />
-          <p class="home-scene-caption">
-            <span>✦</span> 下一部喜欢的，就在这里。
-          </p>
-          <div class="scene-desktop">
-            <ProductDevice
-              device="desktop"
-              eager
-            /><span class="scene-device-label">MacBook Pro</span>
+          <div class="home-device-stage">
+            <div
+              class="home-device-glow"
+              aria-hidden="true"
+            />
+            <p class="home-scene-caption">
+              <span>✦</span> 下一部喜欢的，就在这里。
+            </p>
+            <div class="scene-desktop">
+              <LaptopDevice eager />
+            </div>
+            <div class="scene-tablet">
+              <IPadDevice eager />
+            </div>
+            <div class="scene-phone">
+              <PhoneDevice eager />
+            </div>
           </div>
-          <div class="scene-tablet">
-            <ProductDevice
-              device="tablet"
-              eager
-            /><span class="scene-device-label">iPad</span>
-          </div>
-          <div class="scene-phone">
-            <ProductDevice
-              device="phone"
-              eager
-            /><span class="scene-device-label">MOBILE</span>
-          </div>
-          <div class="home-scene-note">
-            <span><FlowIcon
-              name="check"
-              :size="15"
-            /></span> 三种屏幕，同一份热爱。
+          <div class="home-scene-footer">
+            <span class="scene-device-label">iPad</span>
+            <p class="home-scene-note">
+              <span><FlowIcon
+                name="check"
+                :size="15"
+              /></span> 三种屏幕，同一份热爱。
+            </p>
+            <span class="scene-device-label scene-phone-label">MOBILE</span>
           </div>
         </div>
       </section>
@@ -210,7 +210,16 @@ function closeScreenshot(event: MouseEvent) {
             class="home-experience-visual"
             :data-selected-device="selectedDevice"
           >
-            <ProductDevice :device="selectedDevice" />
+            <component
+              :is="deviceComponents[selectedDevice]"
+              :screenshot="{
+                src: currentDevice.image,
+                alt: `AnimeFlow ${currentDevice.name}播放、弹幕与选集界面`,
+                width: currentDevice.imageWidth,
+                height: currentDevice.imageHeight,
+                includesStatusBar: selectedDevice === 'phone',
+              }"
+            />
           </div>
         </div>
       </section>

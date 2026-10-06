@@ -1,9 +1,9 @@
 export { repoUrl, releasesUrl } from '@/config/site'
 export const platforms = ['Windows', 'Android', 'macOS', 'Linux', 'iOS'] as const
 export const devices = [
-  { id: 'desktop', name: '桌面端', icon: 'desktop', heading: '在大屏上，尽情进入故事。', description: '宽阔的内容视野，清楚的侧栏导航。发现好番、查看播放记录，在桌面上从容安排你的追番日常。', platforms: 'Windows · macOS · Linux', image: '/images/app-wide.jpg' },
-  { id: 'tablet', name: 'iPad', icon: 'tablet', heading: '刚刚好的屏幕，刚刚好的自在。', description: '在平板上展开熟悉的番剧与播放记录。窝进沙发，或者换个角落，把喜欢的故事带在身边。', platforms: 'iPad · iOS', image: '/images/app-wide.jpg' },
-  { id: 'phone', name: '手机', icon: 'phone', heading: '让喜欢，陪你走得更远。', description: '为竖屏保留清晰的内容层次。推荐、播放记录与追番收藏，把碎片时间留给喜欢的故事。', platforms: 'Android · iOS', image: '/images/app-mobile.jpg' },
+  { id: 'desktop', name: '桌面端', icon: 'desktop', heading: '在大屏上，尽情进入故事。', description: '宽阔的播放视野，选集与数据源信息清楚呈现。让弹幕与画面一起展开，在桌面上从容进入喜欢的故事。', platforms: 'Windows · macOS · Linux', image: '/images/app-player-wide.jpg', imageWidth: 1942, imageHeight: 1059 },
+  { id: 'tablet', name: 'iPad', icon: 'tablet', heading: '刚刚好的屏幕，刚刚好的自在。', description: '在平板上展开播放画面、弹幕与选集。窝进沙发，或者换个角落，把喜欢的故事带在身边。', platforms: 'iPad · iOS', image: '/images/app-player-tablet.jpg', imageWidth: 2732, imageHeight: 1986 },
+  { id: 'phone', name: '手机', icon: 'phone', heading: '让喜欢，陪你走得更远。', description: '为竖屏保留清晰的播放层次。画面、弹幕、选集与数据源上下展开，把碎片时间留给喜欢的故事。', platforms: 'Android · iOS', image: '/images/app-player-mobile.jpg', imageWidth: 1080, imageHeight: 2400 },
 ] as const
 export const features = [
   { icon: 'calendar', subtitle: '发现与每日放送', title: '好番，及时发现。', description: '热门推荐、排行榜和每周放送日历，把想看的故事放进你的追番计划。' },
