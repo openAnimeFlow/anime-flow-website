@@ -1,387 +1,434 @@
 <script setup lang="ts">
-import logoImg from '../../../public/logo.ico'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import FlowIcon from '@/components/FlowIcon.vue'
+import ProductDevice from '@/components/ProductDevice.vue'
+import { devices, features, platforms, releasesUrl, repoUrl } from './homeData'
+import './home.css'
 
-const repoUrl = 'https://github.com/openAnimeFlow/AnimeFlow'
-const releasesUrl = `${repoUrl}/releases`
+const menuOpen = ref(false)
+const selectedDevice = ref<(typeof devices)[number]['id']>('desktop')
+const currentDevice = computed(() => devices.find(device => device.id === selectedDevice.value) || devices[0])
+const selectedPlatform = ref<(typeof platforms)[number]>('Windows')
+const screenshotDialog = ref<HTMLDialogElement>()
+const year = new Date().getFullYear()
 
-const platforms = [
-  {name: 'Android', desc: '移动端'},
-  {name: 'iOS', desc: '移动端'},
-  {name: 'Windows', desc: '桌面端'},
-  {name: 'macOS', desc: '桌面端'},
-  {name: 'Linux', desc: '桌面端'},
-] as const
-
-const highlights = [
-  {
-    title: '多数据源',
-    body: '支持自定义数据源，灵活添加、编辑与切换；可配置 XPath 爬虫规则，适配不同站点结构。',
-    accent: 'from-violet-500/20 to-fuchsia-500/10',
-  },
-  {
-    title: '实时超分辨率',
-    body: '基于 Anime4K 在播放中实时提升清晰度，提供效率档与质量档，可按设备性能自由选择。',
-    accent: 'from-cyan-500/20 to-violet-500/10',
-  },
-  {
-    title: 'Bangumi 深度整合',
-    body: '账号登录与收藏同步、热门推荐、时间线、每日放送与排行榜；详情页含角色、评论与标签。',
-    accent: 'from-fuchsia-500/20 to-pink-500/10',
-  },
-  {
-    title: '弹幕体验',
-    body: '对接 Bilibili、Gamer、弹弹Play 等来源；可调透明度、字号、速度与显示区域，并支持类型与样式筛选。',
-    accent: 'from-amber-500/15 to-orange-500/10',
-  },
-] as const
-
-const danmakuDetails = [
-  '透明度、字体大小、滚动速度',
-  '显示区域与类型筛选（滚动 / 顶 / 底）',
-  '边框、颜色与密集模式等样式',
-]
-
-const srModes = [
-  {name: '关闭', note: '节省性能，适合流畅优先'},
-  {name: '效率档', note: '轻量模型，适合中低端设备'},
-  {name: '质量档', note: '高画质，建议独显或高性能 GPU'},
-] as const
-
-const bangumiItems = [
-  '账号登录与资料',
-  '收藏列表同步',
-  '热门与推荐',
-  '时间胶囊动态',
-  '每日放送日历',
-  '多维度排行榜',
-  '番剧详情 / 角色 / 评论 / 标签',
-] as const
+function closeMenu() { menuOpen.value = false }
+function handleKeydown(event: KeyboardEvent) { if (event.key === 'Escape') closeMenu() }
+function expandScreenshot() { screenshotDialog.value?.showModal() }
+function closeScreenshot(event: MouseEvent) {
+  if (event.target === screenshotDialog.value) screenshotDialog.value?.close()
+}
+onMounted(() => {
+  const agent = navigator.userAgent
+  if (/Android/i.test(agent)) selectedPlatform.value = 'Android'
+  else if (/iPhone|iPad/i.test(agent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) selectedPlatform.value = 'iOS'
+  else if (/Mac/i.test(agent)) selectedPlatform.value = 'macOS'
+  else if (/Linux/i.test(agent)) selectedPlatform.value = 'Linux'
+  document.addEventListener('keydown', handleKeydown)
+})
+onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-950 text-slate-200 antialiased selection:bg-violet-500/40 selection:text-white">
-    <div
-      class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,80,220,0.35),transparent)]"
-    />
-    <div
-      class="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_60%_40%_at_100%_0%,rgba(59,130,246,0.12),transparent)]"
-    />
-
-    <header class="sticky top-0 z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-md">
-      <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6">
-        <RouterLink
-          class="flex items-center gap-2 font-semibold tracking-tight text-white"
-          to="/"
-        >
-          <img
-            :src="logoImg"
-            alt="AnimeFlow"
-            class="h-8 w-8 shrink-0 rounded-lg object-contain shadow-lg shadow-violet-500/20 sm:h-9 sm:w-9"
-            width="36"
-            height="36"
-            decoding="async"
-          >
-          <span class="hidden sm:inline">AnimeFlow</span>
-        </RouterLink>
+  <div class="home-page">
+    <a
+      class="home-skip"
+      href="#main"
+    >跳转至主要内容</a>
+    <header class="home-header">
+      <div class="home-container home-nav">
+        <a
+          class="home-brand"
+          href="#main"
+          aria-label="AnimeFlow 首页"
+          @click="closeMenu"
+        ><img
+          src="/images/logo.webp"
+          width="38"
+          height="38"
+          alt=""
+        ><span>AnimeFlow<span class="brand-dot">.</span></span></a>
         <nav
-          class="hidden items-center gap-6 text-sm text-slate-400 md:flex"
-          aria-label="页面导航"
+          class="home-desktop-nav"
+          aria-label="官网导航"
         >
-          <a
-            class="transition hover:text-white"
-            href="#features"
-          >功能</a>
-          <a
-            class="transition hover:text-white"
-            href="#platforms"
-          >平台</a>
-          <a
-            class="transition hover:text-white"
-            href="#bangumi"
-          >Bangumi</a>
-          <a
-            class="transition hover:text-white"
-            href="#data"
-          >数据源</a>
+          <a href="#features">功能体验</a><a href="#experience">多端体验</a><a
+            :href="`${repoUrl}#readme`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >使用指南 <span>↗</span></a>
         </nav>
-        <div class="flex shrink-0 items-center gap-2">
+        <div class="home-nav-actions">
           <a
-            :href="releasesUrl"
-            class="hidden rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-white/5 hover:text-white sm:inline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            下载
-          </a>
-          <a
+            class="home-github"
             :href="repoUrl"
-            class="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 transition hover:bg-white/15"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="访问 GitHub 仓库"
+          ><FlowIcon name="github" /></a><a
+            href="#download"
+            class="home-nav-download"
+          >下载客户端 <FlowIcon
+            name="arrow"
+            :size="16"
+          /></a><button
+            class="home-menu-toggle"
+            :aria-expanded="menuOpen"
+            aria-controls="home-mobile-nav"
+            aria-label="展开或收起导航"
+            @click="menuOpen = !menuOpen"
           >
-            <svg
-              class="h-4 w-4"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"
-              />
-            </svg>
-            GitHub
-          </a>
+            <FlowIcon :name="menuOpen ? 'close' : 'menu'" />
+          </button>
         </div>
       </div>
+      <nav
+        v-show="menuOpen"
+        id="home-mobile-nav"
+        class="home-mobile-nav"
+        aria-label="移动端导航"
+      >
+        <a
+          href="#features"
+          @click="closeMenu"
+        >功能体验</a><a
+          href="#experience"
+          @click="closeMenu"
+        >多端体验</a><a
+          href="#download"
+          @click="closeMenu"
+        >下载客户端</a><a
+          :href="`${repoUrl}#readme`"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="closeMenu"
+        >使用指南 ↗</a>
+      </nav>
     </header>
-
-    <main id="top">
-      <section class="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:px-6 sm:pb-10 sm:pt-10">
-        <p
-          class="mb-4 inline-flex rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-200"
-        >
-          开源跨平台追番播放器
-        </p>
-        <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl sm:leading-[1.1]">
-          用
-          <span class="bg-linear-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-            AnimeFlow
-          </span>
-          追番，多端一致、画质与弹幕兼得
-        </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-400">
-          基于
-          <a
-            :href="repoUrl"
-            class="text-violet-300 underline decoration-violet-500/50 underline-offset-2 hover:text-violet-200"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            openAnimeFlow/AnimeFlow
-          </a>
-          ：支持多数据源与自定义爬虫、实时视频超分辨率（Anime4K）、Bangumi
-          收藏与发现，并接入弹弹Play 等弹幕源，为观影提供流畅体验。
-        </p>
-        <div class="mt-10 flex flex-wrap gap-3">
-          <a
-            :href="releasesUrl"
-            class="inline-flex items-center justify-center rounded-xl bg-linear-to-r from-violet-600 to-fuchsia-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition hover:brightness-110"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            获取发布版本
-          </a>
-          <a
-            :href="repoUrl"
-            class="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            查看源码与文档
-          </a>
-        </div>
-      </section>
-
-      <section id="platforms">
-        <div class="mx-auto max-w-6xl px-4 text-right sm:px-6">
-          <h2 class="text-sm font-semibold uppercase tracking-widest text-violet-400">
-            多平台
-          </h2>
-          <p class="ml-auto mt-2 max-w-xl text-2xl font-semibold text-white">
-            移动端与桌面端一套理念，随处打开即看
+    <main
+      id="main"
+      tabindex="-1"
+    >
+      <section
+        class="home-hero home-container"
+        aria-labelledby="hero-title"
+      >
+        <div class="home-hero-copy">
+          <p class="home-eyebrow">
+            <span class="home-status" /> 开源 · 跨平台 · 为热爱而来
           </p>
-          <ul
-            class="mt-10 flex flex-wrap justify-end gap-3"
-            role="list"
-          >
-            <li
-              v-for="p in platforms"
-              :key="p.name"
-              class="rounded-2xl border border-white/10 bg-slate-950/60 px-5 py-3 text-right shadow-sm"
-            >
-              <span class="block font-medium text-white">{{ p.name }}</span>
-              <span class="text-xs text-slate-500">{{ p.desc }}</span>
-            </li>
-          </ul>
+          <h1 id="hero-title">
+            让喜欢的故事，<br><span>自然发生。</span>
+          </h1>
+          <p class="home-hero-description">
+            从发现好番，到沉浸每一帧。<br>AnimeFlow，把你的追番日常连在一起。
+          </p>
+          <div class="home-hero-buttons">
+            <a
+              class="home-button primary"
+              href="#download"
+            >免费下载 <FlowIcon
+              name="download"
+              :size="18"
+            /></a><a
+              class="home-button secondary"
+              href="#experience"
+            >探索 AnimeFlow <FlowIcon
+              name="arrow"
+              :size="18"
+            /></a>
+          </div>
+          <div class="home-hero-platforms">
+            <span>陪你在每一块屏幕上</span><div>
+              <FlowIcon
+                name="desktop"
+                :size="16"
+              /> 桌面 <i /> <FlowIcon
+                name="tablet"
+                :size="16"
+              /> iPad <i /> <FlowIcon
+                name="phone"
+                :size="16"
+              /> 手机
+            </div>
+          </div>
+        </div>
+        <div
+          class="home-device-scene"
+          role="group"
+          aria-label="AnimeFlow 桌面端、iPad 与手机展示"
+        >
+          <div
+            class="home-device-glow"
+            aria-hidden="true"
+          />
+          <p class="home-scene-caption">
+            <span>✦</span> 下一部喜欢的，就在这里。
+          </p>
+          <div class="scene-desktop">
+            <ProductDevice
+              device="desktop"
+              eager
+            /><span class="scene-device-label">MacBook Pro</span>
+          </div>
+          <div class="scene-tablet">
+            <ProductDevice
+              device="tablet"
+              eager
+            /><span class="scene-device-label">iPad</span>
+          </div>
+          <div class="scene-phone">
+            <ProductDevice
+              device="phone"
+              eager
+            /><span class="scene-device-label">MOBILE</span>
+          </div>
+          <div class="home-scene-note">
+            <span><FlowIcon
+              name="check"
+              :size="15"
+            /></span> 三种屏幕，同一份热爱。
+          </div>
         </div>
       </section>
-
+      <section
+        class="home-platform-ribbon"
+        aria-label="支持的平台"
+      >
+        <div class="home-container">
+          <p>一个 AnimeFlow，连接你的每一天。</p><div>
+            <span
+              v-for="platform in platforms"
+              :key="platform"
+            ><FlowIcon
+              :name="platform === 'Android' || platform === 'iOS' ? 'phone' : 'desktop'"
+              :size="17"
+            />{{ platform }}</span>
+          </div>
+        </div>
+      </section>
       <section
         id="features"
-        class="mx-auto max-w-6xl px-4 py-20 sm:px-6"
+        class="home-features home-container"
+        aria-labelledby="features-title"
       >
-        <h2 class="text-2xl font-semibold text-white sm:text-3xl">
-          核心能力
-        </h2>
-        <p class="mt-2 max-w-2xl text-slate-400">
-          覆盖找片、播放、画质增强与社区数据同步的完整链路。
-        </p>
-        <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        <div class="home-section-heading">
+          <div>
+            <p class="home-eyebrow">
+              DESIGNED AROUND YOUR DAILY FLOW
+            </p><h2 id="features-title">
+              从「想看」，到「正在看」。
+            </h2>
+          </div><p>少一些来回切换，<br>多一些专注喜欢的时间。</p>
+        </div>
+        <div class="home-feature-grid">
           <article
-            v-for="h in highlights"
-            :key="h.title"
-            class="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 p-6 transition hover:border-violet-500/30"
+            v-for="(feature, index) in features"
+            :key="feature.title"
+            class="home-feature-card"
           >
-            <div
-              :class="[
-                'absolute -right-8 -top-8 h-32 w-32 rounded-full bg-linear-to-br opacity-60 blur-2xl transition group-hover:opacity-100',
-                h.accent,
-              ]"
-              aria-hidden="true"
-            />
-            <h3 class="relative text-lg font-semibold text-white">
-              {{ h.title }}
-            </h3>
-            <p class="relative mt-3 text-sm leading-relaxed text-slate-400">
-              {{ h.body }}
-            </p>
+            <div class="home-feature-top">
+              <span class="home-feature-icon"><FlowIcon
+                :name="feature.icon"
+                :size="23"
+              /></span><span>0{{ index + 1 }}</span>
+            </div><p class="home-feature-subtitle">
+              {{ feature.subtitle }}
+            </p><h3>{{ feature.title }}</h3><p>{{ feature.description }}</p>
           </article>
         </div>
       </section>
-
       <section
-        id="danmaku"
-        class="py-20"
+        id="experience"
+        class="home-experience home-container"
+        aria-labelledby="experience-title"
       >
-        <div class="mx-auto grid max-w-6xl gap-12 px-4 sm:grid-cols-2 sm:px-6">
+        <div class="home-section-heading">
           <div>
-            <h2 class="text-2xl font-semibold text-white">
-              弹幕系统
+            <p class="home-eyebrow">
+              ONE APP. EVERY SCREEN.
+            </p><h2 id="experience-title">
+              屏幕不同，喜欢始终如一。
             </h2>
-            <p class="mt-2 text-slate-400">
-              聚合多平台弹幕源，在播放器内统一呈现与调节。
-            </p>
-            <ul class="mt-6 space-y-2 text-sm text-slate-300">
-              <li class="flex gap-2">
-                <span class="text-violet-400">·</span>
-                Bilibili、Gamer、弹弹Play 等
-              </li>
-              <li
-                v-for="d in danmakuDetails"
-                :key="d"
-                class="flex gap-2"
-              >
-                <span class="text-violet-400">·</span>
-                {{ d }}
-              </li>
-            </ul>
-          </div>
-          <div id="sr">
-            <h2 class="text-2xl font-semibold text-white">
-              超分辨率
-            </h2>
-            <p class="mt-2 text-slate-400">
-              播放中即可切换模式；低分辨率片源提升更明显，高性能设备可尝试质量档。
-            </p>
-            <ul class="mt-6 space-y-3">
-              <li
-                v-for="m in srModes"
-                :key="m.name"
-                class="rounded-xl border border-white/10 bg-slate-950/50 px-4 py-3"
-              >
-                <span class="font-medium text-white">{{ m.name }}</span>
-                <span class="mt-1 block text-xs text-slate-500">{{
-                  m.note
-                }}</span>
-              </li>
-            </ul>
-            <p class="mt-4 text-xs text-slate-500">
-              算法致谢：
-              <a
-                href="https://github.com/bloc97/Anime4K"
-                class="text-violet-400 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Anime4K
-              </a>
-            </p>
-          </div>
+          </div><p>桌面、iPad、手机，<br>都有适合自己的打开方式。</p>
         </div>
-      </section>
-
-      <section
-        id="bangumi"
-        class="mx-auto max-w-6xl px-4 py-20 sm:px-6"
-      >
-        <h2 class="text-2xl font-semibold text-white sm:text-3xl">
-          Bangumi 集成
-        </h2>
-        <p class="mt-2 max-w-2xl text-slate-400">
-          使用 Bangumi 开放能力同步账号与番剧元数据：收藏、发现与时间线，让追番状态可携带。
-        </p>
-        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="home-experience-panel">
+          <div class="home-experience-copy">
+            <div
+              class="home-device-picker"
+              aria-label="选择设备展示"
+            >
+              <button
+                v-for="device in devices"
+                :key="device.id"
+                :aria-pressed="selectedDevice === device.id"
+                :class="{ active: selectedDevice === device.id }"
+                @click="selectedDevice = device.id"
+              >
+                <FlowIcon
+                  :name="device.icon"
+                  :size="18"
+                />{{ device.name }}
+              </button>
+            </div>
+            <div
+              class="home-experience-text"
+              aria-live="polite"
+            >
+              <span class="home-device-platforms">{{ currentDevice.platforms }}</span><h3>{{ currentDevice.heading }}</h3><p>{{ currentDevice.description }}</p>
+            </div>
+            <button
+              class="home-text-button"
+              @click="expandScreenshot"
+            >
+              查看完整界面 <FlowIcon
+                name="expand"
+                :size="16"
+              />
+            </button>
+          </div>
           <div
-            v-for="item in bangumiItems"
-            :key="item"
-            class="rounded-xl border border-white/10 bg-slate-900/40 px-4 py-3 text-sm text-slate-300"
+            class="home-experience-visual"
+            :data-selected-device="selectedDevice"
           >
-            {{ item }}
+            <div
+              class="experience-orbit"
+              aria-hidden="true"
+            /><ProductDevice :device="selectedDevice" />
           </div>
         </div>
       </section>
-
       <section
-        id="data"
-        class="py-20"
+        class="home-freedom home-container"
+        aria-labelledby="freedom-title"
       >
-        <div class="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 class="text-2xl font-semibold text-white sm:text-3xl">
-            数据源管理
-          </h2>
-          <p class="mt-2 max-w-2xl text-slate-400">
-            在应用内即可维护数据源：版本、名称、站点与搜索链接、各类 XPath
-            规则等，便于扩展与迁移。
-          </p>
-          <ol class="mt-8 list-decimal space-y-3 pl-5 text-sm text-slate-300 marker:text-violet-400">
-            <li>进入「设置」→「数据源管理」</li>
-            <li>
-              添加数据源并填写站点、搜索 URL（使用 <code class="rounded bg-white/10 px-1.5 py-0.5 text-violet-200">{keyword}</code>
-              作为搜索占位符）
-            </li>
-            <li>配置列表、线路、剧集等 XPath，保存后即可使用</li>
-          </ol>
-        </div>
+        <span class="home-freedom-symbol"><FlowIcon
+          name="source"
+          :size="32"
+        /></span><div>
+          <p class="home-eyebrow">
+            OPEN SOURCE, OPEN POSSIBILITIES
+          </p><h2 id="freedom-title">
+            体验由你定义。
+          </h2><p>自定义数据源，切换播放线路，按习惯调节弹幕。<br>AnimeFlow 的代码同样开放，欢迎一起把它做得更好。</p>
+        </div><a
+          class="home-text-link"
+          :href="repoUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >在 GitHub 参与共建 <FlowIcon
+          name="arrow"
+          :size="18"
+        /></a>
       </section>
-
-      <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div
-          class="rounded-3xl border border-violet-500/20 bg-linear-to-br from-violet-950/50 to-slate-900/80 p-8 text-center sm:p-12"
-        >
-          <h2 class="text-xl font-semibold text-white sm:text-2xl">
-            参与共建
-          </h2>
-          <p class="mx-auto mt-3 max-w-lg text-sm text-slate-400">
-            欢迎通过 Issue 与 Pull Request 反馈问题、提交改进。具体许可证与使用范围请以仓库内说明为准。
-          </p>
-          <a
-            :href="repoUrl"
-            class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            前往 GitHub 仓库
-          </a>
+      <section
+        id="download"
+        class="home-download"
+        aria-labelledby="download-title"
+      >
+        <div class="home-container home-download-inner">
+          <div class="home-download-copy">
+            <p class="home-eyebrow">
+              LET YOUR ANIME FLOW
+            </p><h2 id="download-title">
+              让追番，<br>从此更自在。
+            </h2><p>选择你的设备，和 AnimeFlow 一起进入故事。</p><a
+              :href="releasesUrl"
+              class="home-release-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >查看更新与全部发布版本 ↗</a>
+          </div><div class="home-download-panel">
+            <p class="home-download-panel-label">
+              获取 AnimeFlow <span>开源客户端</span>
+            </p><div
+              class="home-download-platforms"
+              aria-label="选择下载平台"
+            >
+              <button
+                v-for="platform in platforms"
+                :key="platform"
+                :class="{ active: selectedPlatform === platform }"
+                :aria-pressed="selectedPlatform === platform"
+                @click="selectedPlatform = platform"
+              >
+                <FlowIcon
+                  :name="platform === 'Android' || platform === 'iOS' ? 'phone' : 'desktop'"
+                  :size="20"
+                /><span>{{ platform }}</span>
+              </button>
+            </div><a
+              class="home-button primary home-download-cta"
+              :href="releasesUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            ><FlowIcon
+              name="download"
+              :size="18"
+            /> 获取 {{ selectedPlatform }} 版本 <FlowIcon
+              name="arrow"
+              :size="17"
+            /></a><p class="home-download-help">
+              {{ selectedPlatform === 'iOS' ? 'iPhone 与 iPad：前往 GitHub Releases 查看 iOS 构建与安装说明。' : `前往 GitHub Releases 选择适合设备的 ${selectedPlatform} 安装包。` }}
+            </p>
+          </div>
         </div>
       </section>
     </main>
-
-    <footer class="border-t border-white/5 py-10 text-center text-xs text-slate-500">
-      <p>
-        本页为 AnimeFlow 项目介绍站点，内容与功能描述参考
+    <footer class="home-footer home-container">
+      <div>
         <a
-          :href="repoUrl"
-          class="text-violet-400 hover:underline"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          openAnimeFlow/AnimeFlow
-        </a>
-        公开说明。
-      </p>
-      <p class="mt-2">
-        仅供学习交流使用，请遵守法律法规，尊重版权。致谢：Anime4K、Bangumi、弹弹Play 等生态项目。
-      </p>
+          class="home-brand"
+          href="#main"
+          aria-label="返回首页顶部"
+        ><img
+          src="/images/logo.webp"
+          alt=""
+          width="30"
+          height="30"
+        ><span>AnimeFlow<span class="brand-dot">.</span></span></a><p>让热爱，自然发生。</p>
+      </div><div class="home-footer-right">
+        <nav aria-label="项目链接">
+          <a
+            :href="repoUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >GitHub</a><a
+            :href="`${repoUrl}/issues`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >问题反馈 ↗</a><a
+            :href="`${repoUrl}/blob/main/LICENSE.txt`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >开源许可 ↗</a>
+        </nav><p>致谢 Bangumi · Anime4K · 弹弹Play</p><span>© {{ year }} AnimeFlow</span>
+      </div>
     </footer>
+    <dialog
+      ref="screenshotDialog"
+      class="home-screenshot-dialog"
+      aria-labelledby="screenshot-title"
+      @click="closeScreenshot"
+    >
+      <div>
+        <header>
+          <h2 id="screenshot-title">
+            {{ currentDevice.name }} · 界面一览
+          </h2><button
+            aria-label="关闭界面预览"
+            @click="screenshotDialog?.close()"
+          >
+            <FlowIcon
+              name="close"
+              :size="22"
+            />
+          </button>
+        </header><img
+          :src="currentDevice.image"
+          :alt="`AnimeFlow ${currentDevice.name}完整界面截图`"
+        >
+      </div>
+    </dialog>
   </div>
 </template>
