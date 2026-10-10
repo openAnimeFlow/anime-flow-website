@@ -54,12 +54,6 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         >
           项目介绍
         </RouterLink>
-        <RouterLink :to="{ path: '/', hash: '#features' }">
-          功能体验
-        </RouterLink>
-        <RouterLink :to="{ path: '/', hash: '#experience' }">
-          多端体验
-        </RouterLink>
         <a
           :href="`${repoUrl}#readme`"
           target="_blank"
@@ -87,54 +81,65 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         </a>
         <button
           class="menu-toggle"
+          type="button"
           :aria-expanded="menuOpen"
           aria-controls="site-mobile-nav"
           aria-label="展开或收起导航"
           @click="menuOpen = !menuOpen"
         >
-          <FlowIcon :name="menuOpen ? 'close' : 'menu'" />
+          <span class="menu-toggle-icon">
+            <Transition name="menu-icon">
+              <FlowIcon
+                :key="menuOpen ? 'close' : 'menu'"
+                :name="menuOpen ? 'close' : 'menu'"
+              />
+            </Transition>
+          </span>
         </button>
       </div>
     </div>
-    <nav
-      v-show="menuOpen"
-      id="site-mobile-nav"
-      class="mobile-nav"
-      aria-label="移动端导航"
-    >
-      <RouterLink
-        :to="{ name: 'home' }"
-        :class="{ 'nav-current': route.name === 'home' }"
-        @click="closeMenu"
+    <Transition name="mobile-menu">
+      <nav
+        v-show="menuOpen"
+        id="site-mobile-nav"
+        :inert="!menuOpen"
+        class="mobile-nav"
+        aria-label="移动端导航"
       >
-        简介
-      </RouterLink>
-      <RouterLink
-        to="/introduction"
-        :class="{ 'nav-current': route.name === 'introduction' }"
-        @click="closeMenu"
-      >
-        项目介绍
-      </RouterLink>
-      <RouterLink
-        :to="{ path: '/', hash: '#features' }"
-        @click="closeMenu"
-      >
-        功能体验
-      </RouterLink>
-      <RouterLink
-        :to="{ path: '/', hash: '#experience' }"
-        @click="closeMenu"
-      >
-        多端体验
-      </RouterLink>
-      <a
-        :href="`${repoUrl}#readme`"
-        target="_blank"
-        rel="noopener noreferrer"
-        @click="closeMenu"
-      >使用指南 ↗</a>
-    </nav>
+        <RouterLink
+          :to="{ name: 'home' }"
+          :class="{ 'nav-current': route.name === 'home' }"
+          @click="closeMenu"
+        >
+          简介
+        </RouterLink>
+        <RouterLink
+          to="/introduction"
+          :class="{ 'nav-current': route.name === 'introduction' }"
+          @click="closeMenu"
+        >
+          项目介绍
+        </RouterLink>
+        <RouterLink
+          :to="{ path: '/', hash: '#features' }"
+          @click="closeMenu"
+        >
+          功能体验
+        </RouterLink>
+        <RouterLink
+          :to="{ path: '/', hash: '#experience' }"
+          @click="closeMenu"
+        >
+          多端体验
+        </RouterLink>
+        <a
+          :href="`${repoUrl}#readme`"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="closeMenu"
+        >使用指南 ↗</a>
+      </nav>
+    </Transition>
   </header>
 </template>
 
@@ -199,19 +204,46 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 
 .desktop-nav {
   display: flex;
-  gap: 34px;
+  gap: 8px;
   align-items: center;
   color: var(--home-muted);
   font-size: 13px;
 }
 
-.desktop-nav a:hover {
+.desktop-nav a, .mobile-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  transition: color .2s, background-color .2s;
+}
+
+.desktop-nav a:hover, .mobile-nav a:hover {
   color: var(--home-accent);
+  background: var(--home-panel);
 }
 
 .site-header a.nav-current {
   color: var(--home-accent);
-  font-weight: 600;
+  background: var(--home-soft);
+  font-weight: 700;
+  animation: nav-selection .24s ease-out;
+}
+
+@keyframes nav-selection {
+  from { opacity: .65; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-nav a.nav-current::before {
+  content: '';
+  position: absolute;
+  inset: 12px auto 12px 0;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--home-accent);
 }
 
 .desktop-nav a > span {
@@ -254,6 +286,31 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   border: 0;
 }
 
+.menu-toggle-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.menu-toggle-icon > svg {
+  grid-area: 1 / 1;
+}
+
+.menu-icon-enter-active, .menu-icon-leave-active {
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.menu-icon-enter-from {
+  opacity: 0;
+  transform: rotate(-90deg) scale(.7);
+}
+
+.menu-icon-leave-to {
+  opacity: 0;
+  transform: rotate(90deg) scale(.7);
+}
+
 .mobile-nav {
   position: absolute;
   inset: 100% 0 auto;
@@ -264,8 +321,21 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   background: var(--home-bg);
   border-bottom: 1px solid var(--home-line);
   flex-direction: column;
-  gap: 18px;
+  gap: 6px;
   box-shadow: 0 16px 24px var(--home-menu-shadow);
+}
+
+.mobile-menu-enter-active {
+  transition: opacity .22s ease-out, transform .22s ease-out;
+}
+
+.mobile-menu-leave-active {
+  transition: opacity .16s ease-in, transform .16s ease-in;
+}
+
+.mobile-menu-enter-from, .mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 @media (min-width: 851px) {
@@ -325,6 +395,22 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 
   .nav-download svg {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-nav a, .mobile-nav a,
+  .site-header a.nav-current,
+  .mobile-menu-enter-active, .mobile-menu-leave-active,
+  .menu-icon-enter-active, .menu-icon-leave-active {
+    transition: none;
+    animation: none;
+  }
+
+  .mobile-menu-enter-from, .mobile-menu-leave-to,
+  .menu-icon-enter-from, .menu-icon-leave-to {
+    opacity: 1;
+    transform: none;
   }
 }
 </style>
