@@ -1,6 +1,6 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ name: string; size?: number }>(), { size: 20 })
-const paths: Record<string, string> = {
+const paths = {
+  'arrow-up-right': 'M7 17 17 7M7 7h10v10',
   arrow: 'M5 12h14M13 6l6 6-6 6', download: 'M12 3v12M7 10l5 5 5-5M5 16v5h14v-5',
   play: 'm9 5 11 7-11 7Z', calendar: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2ZM7 14h3M14 14h3M7 18h3',
   sparkles: 'm12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6ZM20 2v4M18 4h4',
@@ -12,7 +12,11 @@ const paths: Record<string, string> = {
   expand: 'M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5', menu: 'M4 6h16M4 12h16M4 18h16',
   sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5',
   moon: 'M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z',
-}
+} as const
+
+type IconName = keyof typeof paths
+
+withDefaults(defineProps<{ name: IconName; size?: number }>(), { size: 20 })
 </script>
 
 <template>
@@ -27,6 +31,6 @@ const paths: Record<string, string> = {
     stroke-linejoin="round"
     aria-hidden="true"
   >
-    <path :d="paths[name] || paths.arrow" />
+    <path :d="paths[name]" />
   </svg>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import FlowIcon from '@/components/FlowIcon.vue'
 import { repoUrl } from '@/config/site'
 
 const year = new Date().getFullYear()
@@ -34,17 +35,17 @@ const year = new Date().getFullYear()
           :href="`${repoUrl}#readme`"
           target="_blank"
           rel="noopener noreferrer"
-        >使用指南 ↗</a>
+        >使用指南 <FlowIcon name="arrow-up-right" :size="14" /></a>
         <a
           :href="`${repoUrl}/issues`"
           target="_blank"
           rel="noopener noreferrer"
-        >问题反馈 ↗</a>
+        >问题反馈 <FlowIcon name="arrow-up-right" :size="14" /></a>
         <a
           :href="`${repoUrl}/blob/main/LICENSE.txt`"
           target="_blank"
           rel="noopener noreferrer"
-        >项目许可 ↗</a>
+        >项目许可 <FlowIcon name="arrow-up-right" :size="14" /></a>
       </nav>
       <p>致谢 Bangumi · Anime4K · 弹弹Play</p>
       <span class="footer-copyright">© {{ year }} AnimeFlow</span>
@@ -116,6 +117,16 @@ const year = new Date().getFullYear()
   justify-content: flex-end;
   gap: 12px 24px;
   font-size: 12px;
+}
+
+.footer-details nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-details nav svg {
+  flex-shrink: 0;
 }
 
 .footer-copyright {

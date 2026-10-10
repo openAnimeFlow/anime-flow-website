@@ -58,7 +58,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
           :href="`${repoUrl}#readme`"
           target="_blank"
           rel="noopener noreferrer"
-        >使用指南 <span>↗</span></a>
+        >使用指南 <FlowIcon class="external-link-icon" name="arrow-up-right" :size="14" /></a>
       </nav>
       <div class="nav-actions">
         <button
@@ -137,7 +137,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
           target="_blank"
           rel="noopener noreferrer"
           @click="closeMenu"
-        >使用指南 ↗</a>
+        >使用指南 <FlowIcon class="external-link-icon" name="arrow-up-right" :size="14" /></a>
       </nav>
     </Transition>
   </header>
@@ -237,17 +237,9 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   to { opacity: 1; transform: translateY(0); }
 }
 
-.mobile-nav a.nav-current::before {
-  content: '';
-  position: absolute;
-  inset: 12px auto 12px 0;
-  width: 3px;
-  border-radius: 999px;
-  background: var(--home-accent);
-}
-
-.desktop-nav a > span {
-  margin-left: 3px;
+.external-link-icon {
+  margin-left: 4px;
+  flex-shrink: 0;
 }
 
 .nav-actions {
