@@ -377,8 +377,6 @@
 
 .home-feature-card {
     padding: 26px 22px 29px;
-    border-radius: 14px;
-    background: var(--home-panel);
 }
 
 .home-feature-top {
@@ -431,9 +429,6 @@
     display: grid;
     grid-template-columns: 37% 63%;
     align-items: center;
-    border: 1px solid var(--home-line);
-    background: var(--home-panel);
-    border-radius: 24px;
     padding: 36px;
     gap: 0;
 }
@@ -1125,7 +1120,6 @@
     }
 
     .home-experience-panel {
-        border-radius: 18px;
         padding: 22px;
     }
 
