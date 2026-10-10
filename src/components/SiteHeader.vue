@@ -42,6 +42,18 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         class="desktop-nav"
         aria-label="官网导航"
       >
+        <RouterLink
+          :to="{ name: 'home' }"
+          :class="{ 'nav-current': route.name === 'home' }"
+        >
+          简介
+        </RouterLink>
+        <RouterLink
+          to="/introduction"
+          :class="{ 'nav-current': route.name === 'introduction' }"
+        >
+          项目介绍
+        </RouterLink>
         <RouterLink :to="{ path: '/', hash: '#features' }">
           功能体验
         </RouterLink>
@@ -90,6 +102,20 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
       class="mobile-nav"
       aria-label="移动端导航"
     >
+      <RouterLink
+        :to="{ name: 'home' }"
+        :class="{ 'nav-current': route.name === 'home' }"
+        @click="closeMenu"
+      >
+        简介
+      </RouterLink>
+      <RouterLink
+        to="/introduction"
+        :class="{ 'nav-current': route.name === 'introduction' }"
+        @click="closeMenu"
+      >
+        项目介绍
+      </RouterLink>
       <RouterLink
         :to="{ path: '/', hash: '#features' }"
         @click="closeMenu"
@@ -181,6 +207,11 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 
 .desktop-nav a:hover {
   color: var(--home-accent);
+}
+
+.site-header a.nav-current {
+  color: var(--home-accent);
+  font-weight: 600;
 }
 
 .desktop-nav a > span {
