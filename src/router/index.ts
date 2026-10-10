@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 const Home = () => import('@/view/home/HomeView.vue')
 const Introduction = () => import('@/view/introduction/IntroductionView.vue')
+const Architecture = () => import('@/view/architecture/ArchitectureView.vue')
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,12 @@ const router = createRouter({
             name: 'introduction',
             component: Introduction,
             meta: {title: '项目介绍 · AnimeFlow'},
+        },
+        {
+            path: '/architecture',
+            name: 'architecture',
+            component: Architecture,
+            meta: {title: '架构设计 · AnimeFlow'},
         },
     ],
     scrollBehavior(to, _from, savedPosition) {

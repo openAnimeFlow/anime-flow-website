@@ -93,11 +93,21 @@ onBeforeUnmount(() => {
         >
           项目介绍
         </RouterLink>
+        <RouterLink
+          to="/architecture"
+          :class="{ 'nav-current': route.name === 'architecture' }"
+        >
+          架构设计
+        </RouterLink>
         <a
           :href="`${repoUrl}#readme`"
           target="_blank"
           rel="noopener noreferrer"
-        >使用指南 <FlowIcon class="external-link-icon" name="arrow-up-right" :size="14" /></a>
+        >使用指南 <FlowIcon
+          class="external-link-icon"
+          name="arrow-up-right"
+          :size="14"
+        /></a>
       </nav>
       <div class="nav-actions">
         <details
@@ -112,7 +122,11 @@ onBeforeUnmount(() => {
           >
             <FlowIcon :name="currentTheme.icon" />
           </summary>
-          <div class="theme-options" role="group" aria-label="主题模式">
+          <div
+            class="theme-options"
+            role="group"
+            aria-label="主题模式"
+          >
             <button
               v-for="option in themeOptions"
               :key="option.value"
@@ -120,9 +134,16 @@ onBeforeUnmount(() => {
               :aria-pressed="preference === option.value"
               @click="selectTheme(option.value)"
             >
-              <FlowIcon :name="option.icon" :size="18" />
+              <FlowIcon
+                :name="option.icon"
+                :size="18"
+              />
               <span>{{ option.label }}</span>
-              <FlowIcon v-if="preference === option.value" name="check" :size="16" />
+              <FlowIcon
+                v-if="preference === option.value"
+                name="check"
+                :size="16"
+              />
             </button>
           </div>
         </details>
@@ -177,23 +198,22 @@ onBeforeUnmount(() => {
           项目介绍
         </RouterLink>
         <RouterLink
-          :to="{ path: '/', hash: '#features' }"
+          to="/architecture"
+          :class="{ 'nav-current': route.name === 'architecture' }"
           @click="closeMenu"
         >
-          功能体验
-        </RouterLink>
-        <RouterLink
-          :to="{ path: '/', hash: '#experience' }"
-          @click="closeMenu"
-        >
-          多端体验
+          架构设计
         </RouterLink>
         <a
           :href="`${repoUrl}#readme`"
           target="_blank"
           rel="noopener noreferrer"
           @click="closeMenu"
-        >使用指南 <FlowIcon class="external-link-icon" name="arrow-up-right" :size="14" /></a>
+        >使用指南 <FlowIcon
+          class="external-link-icon"
+          name="arrow-up-right"
+          :size="14"
+        /></a>
       </nav>
     </Transition>
   </header>
