@@ -12,7 +12,6 @@ const selections = ref(chapters.map(() => 0))
 const screenshotDialog = ref<HTMLDialogElement>()
 const previewIndex = ref(0)
 const preview = computed(() => screenshots[previewIndex.value]!)
-const year = new Date().getFullYear()
 
 function selectedScreenshot(chapterIndex: number): AppScreenshot {
   return chapters[chapterIndex]!.screenshots[selections.value[chapterIndex] ?? 0]!
@@ -122,7 +121,7 @@ onBeforeUnmount(() => screenshotDialog.value?.close())
           >
             <IPadDevice :screenshot="deviceScreenshot(chapters[2].screenshots[0])" />
           </button>
-          <span class="intro-scene-label"><span class="intro-status" /> 真实界面页面截图</span>
+          <span class="intro-scene-label"> 真实界面页面截图</span>
         </div>
       </section>
 
@@ -288,28 +287,6 @@ onBeforeUnmount(() => screenshotDialog.value?.close())
         </div>
       </section>
     </main>
-
-    <footer class="intro-footer intro-container">
-      <RouterLink
-        class="intro-footer-brand"
-        to="/"
-      >
-        AnimeFlow<span>.</span>
-      </RouterLink>
-      <p>让热爱，自然发生。</p>
-      <nav aria-label="项目相关链接">
-        <a
-          :href="`${repoUrl}#readme`"
-          target="_blank"
-          rel="noopener noreferrer"
-        >使用指南 ↗</a><a
-          :href="`${repoUrl}/issues`"
-          target="_blank"
-          rel="noopener noreferrer"
-        >问题反馈 ↗</a>
-      </nav>
-      <span>© {{ year }} AnimeFlow</span>
-    </footer>
 
     <dialog
       ref="screenshotDialog"

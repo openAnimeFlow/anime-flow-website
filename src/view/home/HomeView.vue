@@ -15,7 +15,6 @@ const deviceComponents = { desktop: LaptopDevice, tablet: IPadDevice, phone: Pho
 const selectedDevice = ref<(typeof devices)[number]['id']>('desktop')
 const currentDevice = computed(() => devices.find(device => device.id === selectedDevice.value) || devices[0])
 const screenshotDialog = ref<HTMLDialogElement>()
-const year = new Date().getFullYear()
 
 function expandScreenshot() { screenshotDialog.value?.showModal() }
 function closeScreenshot(event: MouseEvent) {
@@ -100,10 +99,7 @@ function closeScreenshot(event: MouseEvent) {
           <div class="home-scene-footer">
             <span class="scene-device-label">iPad</span>
             <p class="home-scene-note">
-              <span><FlowIcon
-                name="check"
-                :size="15"
-              /></span> 三种屏幕，同一份热爱。
+              三种屏幕，同一份热爱。
             </p>
             <span class="scene-device-label scene-phone-label">MOBILE</span>
           </div>
@@ -246,36 +242,6 @@ function closeScreenshot(event: MouseEvent) {
         /></a>
       </section>
     </main>
-    <footer class="home-footer home-container">
-      <div>
-        <a
-          class="home-brand"
-          href="#main"
-          aria-label="返回首页顶部"
-        ><img
-          src="/images/logo.webp"
-          alt=""
-          width="30"
-          height="30"
-        ><span>AnimeFlow<span class="brand-dot">.</span></span></a><p>让热爱，自然发生。</p>
-      </div><div class="home-footer-right">
-        <nav aria-label="项目链接">
-          <a
-            :href="repoUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >GitHub</a><a
-            :href="`${repoUrl}/issues`"
-            target="_blank"
-            rel="noopener noreferrer"
-          >问题反馈 ↗</a><a
-            :href="`${repoUrl}/blob/main/LICENSE.txt`"
-            target="_blank"
-            rel="noopener noreferrer"
-          >开源许可 ↗</a>
-        </nav><p>致谢 Bangumi · Anime4K · 弹弹Play</p><span>© {{ year }} AnimeFlow</span>
-      </div>
-    </footer>
     <dialog
       ref="screenshotDialog"
       class="home-screenshot-dialog"

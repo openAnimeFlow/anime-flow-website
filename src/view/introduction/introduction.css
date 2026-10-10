@@ -79,11 +79,6 @@
 .intro-closing .intro-eyebrow, .intro-closing .intro-actions { justify-content: center; }
 .intro-closing h2 { margin-top: 17px; font-size: 36px; font-weight: 650; letter-spacing: -1.5px; }
 .intro-closing > p:not(.intro-eyebrow) { margin-top: 17px; font-size: 13px; line-height: 1.95; color: var(--home-muted); }
-.intro-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; padding-block: 30px 36px; border-top: 1px solid var(--home-line); color: var(--home-muted); font-size: 11px; }
-.intro-footer-brand { font-size: 20px; font-weight: 700; letter-spacing: -.8px; color: var(--home-ink) !important; }
-.intro-footer-brand > span { color: var(--home-accent); }
-.intro-footer nav { display: flex; gap: 22px; margin-left: auto; }
-.intro-footer a:hover { color: var(--home-accent) !important; }
 .intro-dialog { position: fixed; inset: 0; width: min(1080px, calc(100% - 40px)); max-height: calc(100dvh - 40px); margin: auto; overflow: auto; padding: 0; border: 1px solid var(--home-line); border-radius: 18px; background: var(--home-bg); color: var(--home-ink); box-shadow: 0 24px 80px #00000040; }
 .intro-dialog::backdrop { background: var(--home-dialog-backdrop); }
 .intro-dialog-content { padding: 23px; }
@@ -166,9 +161,6 @@
   .intro-closing h2 { font-size: 27px; letter-spacing: -1px; }
   .intro-closing .intro-eyebrow { font-size: 8px; }
   .intro-closing > p:not(.intro-eyebrow) { font-size: 12px; }
-  .intro-footer { gap: 13px 16px; font-size: 10px; }
-  .intro-footer-brand { font-size: 18px; }
-  .intro-footer nav { width: 100%; margin-left: 0; }
   .intro-dialog { width: calc(100% - 20px); max-height: calc(100dvh - 20px); border-radius: 13px; }
   .intro-dialog-content { padding: 14px; }
   .intro-dialog-header h2 { font-size: 17px; gap: 12px; }

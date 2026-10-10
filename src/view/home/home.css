@@ -1,5 +1,4 @@
 .home-page {
-    min-height: 100vh;
     background: var(--home-bg);
     color: var(--home-ink);
     font-family: Inter, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -72,28 +71,6 @@
 
 .home-skip:focus {
     transform: translateY(0);
-}
-
-.home-brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 23px;
-    font-weight: 700;
-    letter-spacing: -.8px;
-    line-height: 1;
-}
-
-.home-brand img {
-    border-radius: 11px;
-}
-
-.home-brand .brand-dot {
-    color: var(--home-accent);
-}
-
-.home-footer-right a:hover {
-    color: var(--home-accent);
 }
 
 .home-eyebrow {
@@ -578,45 +555,6 @@
     white-space: nowrap;
 }
 
-.home-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-    padding-block: 36px;
-}
-
-.home-footer .home-brand {
-    font-size: 18px;
-}
-
-.home-footer .home-brand img {
-    border-radius: 8px;
-}
-
-.home-footer p {
-    font-size: 11px;
-    color: var(--home-muted);
-    margin-top: 13px;
-}
-
-.home-footer-right {
-    text-align: right;
-}
-
-.home-footer-right nav {
-    display: flex;
-    gap: 24px;
-    font-size: 12px;
-}
-
-.home-footer-right > span {
-    display: block;
-    font-size: 10px;
-    color: var(--home-muted);
-    margin-top: 6px;
-}
-
 .home-screenshot-dialog {
     border: 1px solid var(--home-line);
     border-radius: 15px;
@@ -933,17 +871,6 @@
         width: calc(100% - 40px);
     }
 
-    .home-brand {
-        font-size: 20px;
-        gap: 8px;
-    }
-
-    .home-brand img {
-        width: 32px;
-        height: 32px;
-        border-radius: 9px;
-    }
-
     .home-eyebrow {
         font-size: 9px;
         letter-spacing: 1.2px;
@@ -1222,36 +1149,6 @@
         font-size: 11px;
     }
 
-    .home-footer {
-        align-items: flex-start;
-        padding-block: 30px;
-        gap: 20px;
-    }
-
-    .home-footer .home-brand {
-        font-size: 15px;
-        gap: 6px;
-    }
-
-    .home-footer .home-brand img {
-        width: 25px;
-        height: 25px;
-    }
-
-    .home-footer p {
-        font-size: 9px;
-    }
-
-    .home-footer-right nav {
-        gap: 13px;
-        font-size: 10px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .home-footer-right > span {
-        font-size: 9px;
-    }
 }
 
 @media (max-width: 420px) {

@@ -80,6 +80,8 @@
 }
 
 .app-shell {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: var(--home-bg);
   color: var(--home-ink);
@@ -90,6 +92,7 @@
 }
 
 .app-content {
+  flex: 1;
   padding-top: var(--site-header-height);
 }
 
