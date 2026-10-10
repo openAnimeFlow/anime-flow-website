@@ -4,9 +4,13 @@ import FlowIcon from '@/components/FlowIcon.vue'
 import LaptopDevice from '@/components/devices/LaptopDevice.vue'
 import IPadDevice from '@/components/devices/IPadDevice.vue'
 import PhoneDevice from '@/components/devices/PhoneDevice.vue'
-import { devices, features, platforms, releasesUrl, repoUrl } from './homeData'
+import { devices, features, platforms, repoUrl } from './homeData'
+import ReleaseDownload from './ReleaseDownload.vue'
+import { releasesApiUrl } from '@/config/site'
+import { useReleaseDownloads } from './useReleaseDownloads'
 import './home.css'
 
+const { options, selectedId, version, loading, failed, installationHint, loadRelease, downloadPackage } = useReleaseDownloads(releasesApiUrl)
 const deviceComponents = { desktop: LaptopDevice, tablet: IPadDevice, phone: PhoneDevice }
 const selectedDevice = ref<(typeof devices)[number]['id']>('desktop')
 const currentDevice = computed(() => devices.find(device => device.id === selectedDevice.value) || devices[0])
@@ -44,21 +48,16 @@ function closeScreenshot(event: MouseEvent) {
             从发现好番，到沉浸每一帧。<br>AnimeFlow，把你的追番日常连在一起。
           </p>
           <div class="home-hero-buttons">
-            <a
-              class="home-button primary"
-              :href="releasesUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >免费下载 <FlowIcon
-              name="download"
-              :size="18"
-            /></a><a
-              class="home-button secondary"
-              href="#experience"
-            >探索 AnimeFlow <FlowIcon
-              name="arrow"
-              :size="18"
-            /></a>
+            <ReleaseDownload
+              v-model="selectedId"
+              :options="options"
+              :version="version"
+              :loading="loading"
+              :failed="failed"
+              :hint="installationHint"
+              @retry="loadRelease"
+              @download="downloadPackage"
+            />
           </div>
           <div class="home-hero-platforms">
             <span>陪你在每一块屏幕上</span><div>
