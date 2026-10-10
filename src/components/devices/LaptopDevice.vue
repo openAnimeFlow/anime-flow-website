@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DeviceProps } from './types'
 
-withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined })
+withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined, objectFit: 'cover' })
 
 const keyboard = [
   ['esc', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◦', '◉'],
@@ -41,6 +41,7 @@ const keyboard = [
           :alt="screenshot?.alt ?? 'AnimeFlow 在 macOS MacBook 笔记本中的宽屏界面展示'"
           :width="screenshot?.width ?? 2732"
           :height="screenshot?.height ?? 2010"
+          :style="{ objectFit }"
           :loading="eager ? 'eager' : 'lazy'"
           :fetchpriority="eager ? 'high' : 'auto'"
           decoding="async"

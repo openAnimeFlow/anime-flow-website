@@ -9,4 +9,5 @@ export interface DeviceScreenshot {
 export interface DeviceProps {
   eager?: boolean
   screenshot?: DeviceScreenshot
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down'
 }

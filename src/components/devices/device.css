@@ -13,5 +13,5 @@
   object-fit: cover;
   object-position: top;
 }
-[data-custom-screenshot=true] .device-screen img { object-fit: contain; object-position: center; }
+[data-custom-screenshot=true] .device-screen img { object-position: center; }
 .hardware-button { position: absolute; z-index: -1; background: linear-gradient(90deg, #87898e, #d4d6d9, #85888d); border-radius: .6cqw; }

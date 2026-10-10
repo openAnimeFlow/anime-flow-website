@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DeviceProps } from './types'
 
-withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined })
+withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined, objectFit: 'cover' })
 </script>
 
 <template>
@@ -40,6 +40,7 @@ withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined }
           :alt="screenshot?.alt ?? 'AnimeFlow 手机端推荐与播放记录界面'"
           :width="screenshot?.width ?? 1080"
           :height="screenshot?.height ?? 2294"
+          :style="{ objectFit }"
           :loading="eager ? 'eager' : 'lazy'"
           :fetchpriority="eager ? 'high' : 'auto'"
           decoding="async"
@@ -53,7 +54,7 @@ withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined }
 <style scoped>
 .device-bezel { padding: 2.3cqw; border-radius: 15cqw; background: #131316; box-shadow: 0 0 0 .55cqw #4b4b4e, 0 0 0 1.3cqw #bab8b4, 0 0 0 1.55cqw #797772, inset 0 0 0 .35cqw #3e3f43; }
 .device-screen { aspect-ratio: auto; border-radius: 12.7cqw; }
-.device-screen img { height: auto; }
+.device-screen img { height: auto; aspect-ratio: 1080 / 2294; }
 .phone-status { height: 13cqw; display: flex; align-items: center; justify-content: space-between; padding: 0 7cqw; background: #0e1316; color: #eceef0; font-size: 5.5cqw; font-weight: 600; }
 .dynamic-island { position: absolute; left: 32%; top: 5.3cqw; width: 36%; height: 7.4cqw; border-radius: 5cqw; background: #000; }
 .dynamic-island i { position: absolute; right: 3cqw; top: 2.2cqw; width: 3cqw; height: 3cqw; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #17233b, #070c12 70%); }
