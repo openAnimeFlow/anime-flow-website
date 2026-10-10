@@ -132,6 +132,11 @@
     margin-top: 32px;
 }
 
+.home-release-link {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
 .home-hero-buttons > .home-button {
     min-height: 42px;
     padding-block: 9px;

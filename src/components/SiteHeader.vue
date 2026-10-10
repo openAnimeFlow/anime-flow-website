@@ -2,7 +2,7 @@
 import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue'
 import {RouterLink, useRoute} from 'vue-router'
 import FlowIcon from '@/components/FlowIcon.vue'
-import {repoUrl} from '@/config/site'
+import {publicAsset, repoUrl} from '@/config/site'
 import {useTheme, type ThemePreference} from '@/theme'
 
 const {preference, setTheme} = useTheme()
@@ -67,11 +67,11 @@ onBeforeUnmount(() => {
       <RouterLink
         class="site-brand"
         :to="{ path: '/', hash: '#main' }"
-        aria-label="AnimeFlow 首页"
+        aria-label="AnimeFlow 官网首页"
         @click="closeMenu"
       >
         <img
-          src="/images/logo.webp"
+          :src="publicAsset('images/logo.webp')"
           width="38"
           height="38"
           alt=""

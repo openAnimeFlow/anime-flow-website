@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DeviceProps } from './types'
+import { publicAsset } from '@/config/site'
 
 withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined, objectFit: 'cover' })
 </script>
@@ -36,7 +37,7 @@ withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined, 
           </div>
         </div>
         <img
-          :src="screenshot?.src ?? '/images/app-mobile.jpg'"
+          :src="screenshot?.src ?? publicAsset('images/app-mobile.jpg')"
           :alt="screenshot?.alt ?? 'AnimeFlow 手机端推荐与播放记录界面'"
           :width="screenshot?.width ?? 1080"
           :height="screenshot?.height ?? 2294"

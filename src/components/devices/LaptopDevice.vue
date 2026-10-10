@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DeviceProps } from './types'
+import { publicAsset } from '@/config/site'
 
 withDefaults(defineProps<DeviceProps>(), { eager: false, screenshot: undefined, objectFit: 'cover' })
 
@@ -37,7 +38,7 @@ const keyboard = [
           </div>
         </div>
         <img
-          :src="screenshot?.src ?? '/images/app-wide.jpg'"
+          :src="screenshot?.src ?? publicAsset('images/app-wide.jpg')"
           :alt="screenshot?.alt ?? 'AnimeFlow 在 macOS MacBook 笔记本中的宽屏界面展示'"
           :width="screenshot?.width ?? 2732"
           :height="screenshot?.height ?? 2010"

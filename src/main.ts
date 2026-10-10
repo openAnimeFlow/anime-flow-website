@@ -1,8 +1,13 @@
-import { createApp } from 'vue'
+import { createApp, createSSRApp } from 'vue'
 import '@/style.css'
 import App from '@/App.vue'
-import router from '@/router'
+import { createSiteRouter } from '@/router'
 import { initializeTheme } from '@/theme'
 
-initializeTheme()
-createApp(App).use(router).mount('#app')
+const router = createSiteRouter()
+const app = document.querySelector('#app')?.childElementCount ? createSSRApp(App) : createApp(App)
+app.use(router)
+router.isReady().then(() => {
+  app.mount('#app')
+  initializeTheme()
+})

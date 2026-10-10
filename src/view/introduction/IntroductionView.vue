@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 import FlowIcon from '@/components/FlowIcon.vue'
 import IPadDevice from '@/components/devices/IPadDevice.vue'
 import type { DeviceScreenshot } from '@/components/devices/types'
-import { repoUrl } from '@/config/site'
+import { publicAsset, repoUrl } from '@/config/site'
 import { chapters, moreFeatures, screenshots, type AppScreenshot } from './introductionData'
 import './introduction.css'
 
@@ -19,7 +19,7 @@ function selectedScreenshot(chapterIndex: number): AppScreenshot {
 
 function deviceScreenshot(screenshot: AppScreenshot): DeviceScreenshot {
   return {
-    src: screenshot.src,
+    src: publicAsset(screenshot.src),
     alt: `AnimeFlow ${screenshot.label}：${screenshot.description}`,
     width: 1640,
     height: 1229,
@@ -66,10 +66,10 @@ onBeforeUnmount(() => screenshotDialog.value?.close())
       >
         <div class="intro-hero-copy">
           <p class="intro-eyebrow">
-            <span class="intro-status" /> MEET ANIMEFLOW
+            <span class="intro-status" /> ANIMEFLOW · 功能与项目介绍
           </p>
           <h1 id="intro-title">
-            每一份喜欢，<br><span>都有迹可循。</span>
+            认识 AnimeFlow，<br><span>让喜欢有迹可循。</span>
           </h1>
           <p class="intro-lead">
             一个连接发现、追番与观看的动漫客户端。<br>让找番少一点折腾，让喜欢多一点陪伴。
@@ -252,7 +252,7 @@ onBeforeUnmount(() => screenshotDialog.value?.close())
         aria-labelledby="intro-closing-title"
       >
         <img
-          src="/images/logo.webp"
+          :src="publicAsset('images/logo.webp')"
           alt=""
           width="58"
           height="58"
@@ -343,7 +343,7 @@ onBeforeUnmount(() => screenshotDialog.value?.close())
             /> 上一张
           </button>
           <a
-            :href="preview.src"
+            :href="publicAsset(preview.src)"
             target="_blank"
             rel="noopener noreferrer"
           >查看图片 ↗</a>

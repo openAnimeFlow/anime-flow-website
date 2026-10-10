@@ -25,7 +25,7 @@ import './architecture.css'
           <p class="arch-eyebrow">
             <span class="arch-status" /> ENGINEERING / ANIMEFLOW
           </p>
-          <h1>从全局架构，<br>读懂<span>每一条播放链路。</span></h1>
+          <h1>AnimeFlow 架构设计，<br>读懂<span>每一条播放链路。</span></h1>
           <p class="arch-lead">
             一份基于客户端源码的架构设计说明。沿着数据与事件的流向，了解 AnimeFlow 如何连接跨平台界面、可配置数据源、双播放内核、离线下载与收藏同步。
           </p>

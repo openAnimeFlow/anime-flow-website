@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import FlowIcon from '@/components/FlowIcon.vue'
-import { repoUrl } from '@/config/site'
+import { publicAsset, repoUrl } from '@/config/site'
 
 const year = new Date().getFullYear()
 </script>
@@ -15,14 +15,14 @@ const year = new Date().getFullYear()
         aria-label="返回 AnimeFlow 首页"
       >
         <img
-          src="/images/logo.webp"
+          :src="publicAsset('images/logo.webp')"
           alt=""
           width="30"
           height="30"
         >
         <span>AnimeFlow<span class="brand-dot">.</span></span>
       </RouterLink>
-      <p>让热爱，自然发生。</p>
+      <p>AnimeFlow 官网 · 开源跨平台动漫追番播放器</p>
     </div>
     <div class="footer-details">
       <nav aria-label="页脚导航">

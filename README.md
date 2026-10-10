@@ -1,5 +1,15 @@
-# Vue 3 + TypeScript + Vite
+# AnimeFlow 官网
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+正式地址：**https://web.ligg.top/**。应用开源仓库：[openAnimeFlow/AnimeFlow](https://github.com/openAnimeFlow/AnimeFlow)。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+基于 Vue 3、TypeScript 和 Vite，介绍 AnimeFlow 的功能、官方安装包与客户端架构。
+
+## 开发与构建
+
+```sh
+npm install
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```

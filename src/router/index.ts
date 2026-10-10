@@ -1,11 +1,15 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { applySeo } from '@/config/seo'
 
 const Home = () => import('@/view/home/HomeView.vue')
 const Introduction = () => import('@/view/introduction/IntroductionView.vue')
 const Architecture = () => import('@/view/architecture/ArchitectureView.vue')
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+export function createSiteRouter() {
+  const router = createRouter({
+    history: import.meta.env.SSR
+      ? createMemoryHistory(import.meta.env.BASE_URL)
+      : createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
@@ -16,13 +20,15 @@ const router = createRouter({
             path: '/introduction',
             name: 'introduction',
             component: Introduction,
-            meta: {title: '项目介绍 · AnimeFlow'},
         },
         {
             path: '/architecture',
             name: 'architecture',
             component: Architecture,
-            meta: {title: '架构设计 · AnimeFlow'},
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            component: () => import('@/view/NotFoundView.vue'),
         },
     ],
     scrollBehavior(to, _from, savedPosition) {
@@ -31,16 +37,15 @@ const router = createRouter({
             const headerHeight = Number.parseFloat(
                 getComputedStyle(document.documentElement).getPropertyValue('--site-header-height'),
             ) || 0
-            return {el: to.hash, top: headerHeight + 24, behavior: 'smooth'}
+            return { el: to.hash, top: headerHeight + 24, behavior: 'smooth' }
         }
-        return {top: 0}
+        return { top: 0 }
     },
-})
+  })
 
-router.afterEach(to => {
-    document.title = typeof to.meta.title === 'string'
-        ? to.meta.title
-        : 'AnimeFlow — 跨平台动漫追番播放器'
-})
+  router.afterEach(to => {
+    if (!import.meta.env.SSR) applySeo(to.path)
+  })
 
-export default router
+  return router
+}

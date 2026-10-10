@@ -6,7 +6,7 @@ import IPadDevice from '@/components/devices/IPadDevice.vue'
 import PhoneDevice from '@/components/devices/PhoneDevice.vue'
 import { devices, features, platforms, repoUrl } from './homeData'
 import ReleaseDownload from '@/components/ReleaseDownload.vue'
-import { releasesApiUrl } from '@/config/site'
+import { publicAsset, releasesApiUrl, releasesUrl } from '@/config/site'
 import { useReleaseDownloads } from './useReleaseDownloads'
 import './home.css'
 
@@ -38,13 +38,13 @@ function closeScreenshot(event: MouseEvent) {
       >
         <div class="home-hero-copy">
           <p class="home-eyebrow">
-            <span class="home-status" /> 开源 · 跨平台 · 为热爱而来
+            <span class="home-status" /> AnimeFlow 官网 · 开源 · 跨平台
           </p>
           <h1 id="hero-title">
-            让喜欢的故事，<br><span>自然发生。</span>
+            AnimeFlow，<br><span>让追番自然发生。</span>
           </h1>
           <p class="home-hero-description">
-            从发现好番，到沉浸每一帧。<br>AnimeFlow，把你的追番日常连在一起。
+            开源跨平台动漫追番播放器。<br>多数据源、实时超分、弹幕与 Bangumi 收藏同步，把你的追番日常连在一起。
           </p>
           <div class="home-hero-buttons">
             <ReleaseDownload
@@ -57,6 +57,15 @@ function closeScreenshot(event: MouseEvent) {
               @retry="loadRelease"
               @download="downloadPackage"
             />
+            <a
+              class="home-text-link home-release-link"
+              :href="releasesUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >官方发布与全部安装包 <FlowIcon
+              name="arrow-up-right"
+              :size="16"
+            /></a>
           </div>
           <div class="home-hero-platforms">
             <span>陪你在每一块屏幕上</span><div>
@@ -208,7 +217,7 @@ function closeScreenshot(event: MouseEvent) {
             <component
               :is="deviceComponents[selectedDevice]"
               :screenshot="{
-                src: currentDevice.image,
+                src: publicAsset(currentDevice.image),
                 alt: `AnimeFlow ${currentDevice.name}播放、弹幕与选集界面`,
                 width: currentDevice.imageWidth,
                 height: currentDevice.imageHeight,
@@ -262,7 +271,7 @@ function closeScreenshot(event: MouseEvent) {
             />
           </button>
         </header><img
-          :src="currentDevice.image"
+          :src="publicAsset(currentDevice.image)"
           :alt="`AnimeFlow ${currentDevice.name}完整界面截图`"
         >
       </div>
