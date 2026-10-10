@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import {onBeforeUnmount, onMounted, ref, watch} from 'vue'
+import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue'
 import {RouterLink, useRoute} from 'vue-router'
 import FlowIcon from '@/components/FlowIcon.vue'
 import {repoUrl} from '@/config/site'
-import {useTheme} from '@/theme'
+import {useTheme, type ThemePreference} from '@/theme'
 
-const {theme, toggleTheme} = useTheme()
+const {preference, setTheme} = useTheme()
+const themeOptions = [
+  { value: 'system', label: '跟随系统', icon: 'desktop' },
+  { value: 'dark', label: '深色', icon: 'moon' },
+  { value: 'light', label: '浅色', icon: 'sun' },
+] as const
+const currentTheme = computed(() => themeOptions.find(option => option.value === preference.value)!)
+const themeMenu = ref<HTMLDetailsElement>()
 const route = useRoute()
 const menuOpen = ref(false)
 
@@ -13,13 +20,45 @@ function closeMenu() {
   menuOpen.value = false
 }
 
-function handleKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') closeMenu()
+function closeThemeMenu(restoreFocus = false) {
+  if (!themeMenu.value?.open) return
+  themeMenu.value.open = false
+  if (restoreFocus) themeMenu.value.querySelector('summary')?.focus()
 }
 
-watch(() => route.fullPath, closeMenu)
-onMounted(() => document.addEventListener('keydown', handleKeydown))
-onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
+function selectTheme(value: ThemePreference) {
+  setTheme(value)
+  closeThemeMenu(true)
+}
+
+function toggleMenu() {
+  closeThemeMenu()
+  menuOpen.value = !menuOpen.value
+}
+
+function handlePointerdown(event: PointerEvent) {
+  if (event.target instanceof Node && !themeMenu.value?.contains(event.target)) closeThemeMenu()
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    closeMenu()
+    closeThemeMenu(true)
+  }
+}
+
+watch(() => route.fullPath, () => {
+  closeMenu()
+  closeThemeMenu()
+})
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown)
+  document.addEventListener('pointerdown', handlePointerdown)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('pointerdown', handlePointerdown)
+})
 </script>
 
 <template>
@@ -61,15 +100,32 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
         >使用指南 <FlowIcon class="external-link-icon" name="arrow-up-right" :size="14" /></a>
       </nav>
       <div class="nav-actions">
-        <button
-          class="theme-toggle"
-          type="button"
-          :aria-label="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
-          :title="theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'"
-          @click="toggleTheme"
+        <details
+          ref="themeMenu"
+          class="theme-control"
         >
-          <FlowIcon :name="theme === 'dark' ? 'sun' : 'moon'" />
-        </button>
+          <summary
+            class="theme-toggle"
+            :aria-label="`主题：${currentTheme.label}`"
+            :title="`主题：${currentTheme.label}`"
+            @click="closeMenu"
+          >
+            <FlowIcon :name="currentTheme.icon" />
+          </summary>
+          <div class="theme-options" role="group" aria-label="主题模式">
+            <button
+              v-for="option in themeOptions"
+              :key="option.value"
+              type="button"
+              :aria-pressed="preference === option.value"
+              @click="selectTheme(option.value)"
+            >
+              <FlowIcon :name="option.icon" :size="18" />
+              <span>{{ option.label }}</span>
+              <FlowIcon v-if="preference === option.value" name="check" :size="16" />
+            </button>
+          </div>
+        </details>
         <a
           class="github-link"
           :href="repoUrl"
@@ -85,7 +141,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
           :aria-expanded="menuOpen"
           aria-controls="site-mobile-nav"
           aria-label="展开或收起导航"
-          @click="menuOpen = !menuOpen"
+          @click="toggleMenu"
         >
           <span class="menu-toggle-icon">
             <Transition name="menu-icon">
@@ -167,7 +223,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   cursor: pointer;
 }
 
-.site-header a:focus-visible, .site-header button:focus-visible {
+.site-header a:focus-visible, .site-header button:focus-visible, .theme-toggle:focus-visible {
   outline: 3px solid var(--home-accent);
   outline-offset: 5px;
 }
@@ -252,6 +308,10 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   display: flex;
 }
 
+.theme-control {
+  position: relative;
+}
+
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -263,11 +323,61 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
   border-radius: 10px;
   background: transparent;
   color: var(--home-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.theme-toggle::-webkit-details-marker {
+  display: none;
 }
 
 .theme-toggle:hover {
   background: var(--home-soft);
   color: var(--home-accent);
+}
+
+.theme-options {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1;
+  width: 164px;
+  padding: 6px;
+  border: 1px solid var(--home-line);
+  border-radius: 12px;
+  background: var(--home-bg);
+  box-shadow: 0 12px 28px var(--home-menu-shadow);
+  animation: nav-selection .18s ease-out;
+}
+
+.theme-options button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--home-muted);
+  font-size: 13px;
+}
+
+.theme-options button span {
+  flex: 1;
+  text-align: left;
+}
+
+.theme-options button:hover {
+  background: var(--home-panel);
+  color: var(--home-accent);
+}
+
+.theme-options button[aria-pressed=true] {
+  background: var(--home-soft);
+  color: var(--home-accent);
+  font-weight: 600;
 }
 
 .menu-toggle {
@@ -393,6 +503,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', handleKeydown))
 @media (prefers-reduced-motion: reduce) {
   .desktop-nav a, .mobile-nav a,
   .site-header a.nav-current,
+  .theme-options,
   .mobile-menu-enter-active, .mobile-menu-leave-active,
   .menu-icon-enter-active, .menu-icon-leave-active {
     transition: none;
